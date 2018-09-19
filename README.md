@@ -63,10 +63,6 @@ You can also look for information at:
 
     [http://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-ChroniclingAmerica](http://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-ChroniclingAmerica)
 
-- AnnoCPAN: Annotated CPAN documentation
-
-    [http://annocpan.org/dist/Genealogy-ChroniclingAmerica](http://annocpan.org/dist/Genealogy-ChroniclingAmerica)
-
 - CPAN Ratings
 
     [http://cpanratings.perl.org/d/Genealogy-ChroniclingAmerica](http://cpanratings.perl.org/d/Genealogy-ChroniclingAmerica)
