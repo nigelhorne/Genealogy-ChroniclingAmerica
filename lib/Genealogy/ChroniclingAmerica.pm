@@ -137,6 +137,8 @@ sub get_next_entry
 {
 	my $self = shift;
 
+	return if($self->{'matches'} == 0);
+
 	if($self->{'index'} >= $self->{'matches'}) {
 		return;
 	}
