@@ -220,7 +220,7 @@ L<https://metacpan.org/release/Genealogy-ChroniclingAmerica>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2016-2018 Nigel Horne.
+Copyright 2018 Nigel Horne.
 
 This program is released under the following licence: GPL2
 
