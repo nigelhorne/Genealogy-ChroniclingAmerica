@@ -204,10 +204,6 @@ You can also look for information at:
 
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-ChroniclingAmerica>
 
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Genealogy-ChroniclingAmerica>
-
 =item * CPAN Ratings
 
 L<http://cpanratings.perl.org/d/Genealogy-ChroniclingAmerica>
