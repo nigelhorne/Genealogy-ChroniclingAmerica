@@ -65,9 +65,7 @@ sub new {
 	die "Last name is not optional" unless($args{'lastname'});
 	die "State is not optional" unless($args{'state'});
 
-	if(length($args{'state'}) == 2) {
-		die "State needs to be the full name";
-	}
+	die "State needs to be the full name" if(length($args{'state'}) == 2);
 
 	my $ua = delete $args{ua} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
 	$ua->env_proxy(1);
