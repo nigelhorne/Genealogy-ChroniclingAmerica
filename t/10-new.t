@@ -1,7 +1,8 @@
-#!perl -wT
+#!perl -w
 
 use strict;
 
+use lib 'lib';
 use Test::Most;
 use Genealogy::ChroniclingAmerica;
 
