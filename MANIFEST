@@ -8,6 +8,8 @@ t/00-load.t
 t/10-new.t
 t/chronicling.t
 t/coverage.t
+t/dist.t
+t/kwalitee.t
 t/links.t
 t/manifest.t
 t/no404s.t
