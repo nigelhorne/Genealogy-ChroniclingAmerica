@@ -1,6 +1,6 @@
 # NAME
 
-Genealogy::ChroniclingAmerica - Find URLs on the Library of Congress Newspaper records for a given person
+Genealogy::ChroniclingAmerica - Find URLs for a given person on the Library of Congress Newspaper Records
 
 # VERSION
 
@@ -49,7 +49,7 @@ automatically be notified of progress on your bug as I make changes.
 # SEE ALSO
 
 [https://github.com/nigelhorne/gedcom](https://github.com/nigelhorne/gedcom)
-[https://www.findagrave.com](https://www.findagrave.com)
+[https://chroniclingamerica.loc.gov](https://chroniclingamerica.loc.gov)
 
 # SUPPORT
 

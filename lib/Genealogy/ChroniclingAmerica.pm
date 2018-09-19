@@ -188,7 +188,7 @@ automatically be notified of progress on your bug as I make changes.
 =head1 SEE ALSO
 
 L<https://github.com/nigelhorne/gedcom>
-L<https://www.findagrave.com>
+L<https://chroniclingamerica.loc.gov>
 
 =head1 SUPPORT
 
