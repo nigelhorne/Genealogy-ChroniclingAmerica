@@ -31,7 +31,7 @@ CHRONICLING: {
 		ok(!defined($ca->get_next_entry()));
 		ok($count > 0);
 
-		my $ca = Genealogy::ChroniclingAmerica->new({
+		$ca = Genealogy::ChroniclingAmerica->new({
 			'firstname' => 'mahalan',
 			'lastname' => 'sargent',
 			'date_of_birth' => 1895,
