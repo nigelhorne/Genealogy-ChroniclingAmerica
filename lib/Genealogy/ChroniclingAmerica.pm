@@ -10,7 +10,7 @@ use Carp;
 
 =head1 NAME
 
-Genealogy::ChroniclingAmerica - Find URLs on the Library of Congress Newspaper records for a given person
+Genealogy::ChroniclingAmerica - Find URLs for a given person on the Library of Congress Newspaper Records
 
 =head1 VERSION
 
