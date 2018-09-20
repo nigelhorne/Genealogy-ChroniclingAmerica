@@ -28,14 +28,14 @@ our $VERSION = '0.01';
     HTTP::Cache::Transparent::init({
 	BasePath => '/var/cache/loc'
     });
-    my $f = Genealogy::ChroniclingAmerica->new({
+    my $loc = Genealogy::ChroniclingAmerica->new({
 	firstname => 'John',
 	lastname => 'Smith',
 	country => 'Indiana',
 	date_of_death => 1862
     });
 
-    while(my $url = $f->get_next_entry()) {
+    while(my $url = $loc->get_next_entry()) {
 	print "$url\n";
     }
 }
@@ -43,6 +43,18 @@ our $VERSION = '0.01';
 =head1 SUBROUTINES/METHODS
 
 =head2 new
+
+Creates a Genealogy::ChroniclingAMerica object.
+
+It takes three mandatory arguments state, firstname and lastname.
+State must be the full name, not an abbreviation.
+
+There are four optional arguments: middlename, date_of_birth, date_of_death, ua and host.
+
+host is the domain of the site to search, the default is chroniclingamerica.loc.gov.
+
+ua is a pointer to an object that understands get and env_proxy messages, such
+as L<LWP::UserAgent::Throttled>.
 
 =cut
 
@@ -70,7 +82,7 @@ sub new {
 	my $ua = delete $args{ua} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
 	$ua->env_proxy(1);
 
-	my $rc = { ua => $ua, };
+	my $rc = { ua => $ua };
 	$rc->{'host'} = $args{'host'} || 'chroniclingamerica.loc.gov';
 
 	my %query_parameters = ( 'format' => 'json', 'state' => ucfirst(lc($args{'state'})) );

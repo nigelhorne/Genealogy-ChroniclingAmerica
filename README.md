@@ -14,14 +14,14 @@ Version 0.01
     HTTP::Cache::Transparent::init({
         BasePath => '/var/cache/loc'
     });
-    my $f = Genealogy::ChroniclingAmerica->new({
+    my $loc = Genealogy::ChroniclingAmerica->new({
         firstname => 'John',
         lastname => 'Smith',
         country => 'Indiana',
         date_of_death => 1862
     });
 
-    while(my $url = $f->get_next_entry()) {
+    while(my $url = $loc->get_next_entry()) {
         print "$url\n";
     }
 }
@@ -29,6 +29,18 @@ Version 0.01
 # SUBROUTINES/METHODS
 
 ## new
+
+Creates a Genealogy::ChroniclingAMerica object.
+
+It takes three mandatory arguments state, firstname and lastname.
+State must be the full name, not an abbreviation.
+
+There are four optional arguments: middlename, date\_of\_birth, date\_of\_death, ua and host.
+
+host is the domain of the site to search, the default is chroniclingamerica.loc.gov.
+
+ua is a pointer to an object that understands get and env\_proxy messages, such
+as [LWP::UserAgent::Throttled](https://metacpan.org/pod/LWP::UserAgent::Throttled).
 
 ## get\_next\_entry
 
