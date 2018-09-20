@@ -48,6 +48,7 @@ WriteMakefile(
     PREREQ_PM => {
     	'Carp' => 0,
     	'JSON' => 0,
+	'LWP::Protocol::https' => 0,
 	'LWP::UserAgent' => 0,
     	'URI' => 0,
     },
