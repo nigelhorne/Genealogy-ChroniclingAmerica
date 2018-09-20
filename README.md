@@ -24,7 +24,6 @@ Version 0.01
     while(my $url = $loc->get_next_entry()) {
         print "$url\n";
     }
-}
 
 # SUBROUTINES/METHODS
 
