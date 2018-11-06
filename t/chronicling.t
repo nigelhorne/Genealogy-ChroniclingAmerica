@@ -9,7 +9,7 @@ CHRONICLING: {
 	unless(-e 't/online.enabled') {
 		plan skip_all => 'On-line tests disabled';
 	} else {
-		plan tests => 9;
+		plan tests => 12;
 
 		use_ok('Genealogy::ChroniclingAmerica');
 
@@ -36,6 +36,18 @@ CHRONICLING: {
 			'lastname' => 'sargent',
 			'date_of_birth' => 1895,
 			'date_of_death' => 1895,
+			'state' => 'Indiana',
+		});
+		ok(defined($ca));
+		ok($ca->isa('Genealogy::ChroniclingAmerica'));
+
+		ok(!defined($ca->get_next_entry()));
+
+		$ca = Genealogy::ChroniclingAmerica->new({
+			'firstname' => 'katherine',
+			'lastname' => 'bixler',
+			'date_of_birth' => 1789,
+			'date_of_death' => 1963,
 			'state' => 'Indiana',
 		});
 		ok(defined($ca));
