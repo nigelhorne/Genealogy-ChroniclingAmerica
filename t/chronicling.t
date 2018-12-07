@@ -7,9 +7,9 @@ use Test::URI;
 
 CHRONICLING: {
 	unless(-e 't/online.enabled') {
-		plan skip_all => 'On-line tests disabled';
+		plan(skip_all => 'On-line tests disabled');
 	} else {
-		plan tests => 12;
+		plan(tests => 13);
 
 		use_ok('Genealogy::ChroniclingAmerica');
 
@@ -26,6 +26,7 @@ CHRONICLING: {
 		while(my $link = $ca->get_next_entry()) {
 			diag($link);
 			uri_host_ok($link, 'chroniclingamerica.loc.gov');
+			ok($link =~ /\.pdf$/);
 			$count++;
 		}
 		ok(!defined($ca->get_next_entry()));

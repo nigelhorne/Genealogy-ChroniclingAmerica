@@ -64,17 +64,26 @@ sub new {
 	my %args;
 	if(ref($_[0]) eq 'HASH') {
 		%args = %{$_[0]};
-	} elsif(ref($_[0])) {
-		Carp::croak("Usage: __PACKAGE__->new(%args)");
+	} elsif(ref($_[0]) || !defined($_[0])) {
+		Carp::croak('Usage: ', __PACKAGE__, '->new(%args)');
 	} elsif(@_ % 2 == 0) {
 		%args = @_;
 	}
 
-	die "First name is not optional" unless($args{'firstname'});
-	die "Last name is not optional" unless($args{'lastname'});
-	die "State is not optional" unless($args{'state'});
+	unless($args{'firstname'}) {
+		Carp::croak('First name is not optional');
+		return;	# Don't know why this is needed, but it is
+	}
+	unless(defined($args{'lastname'})) {
+		Carp::croak('Last name is not optional');
+		return;
+	}
+	unless($args{'state'}) {
+		Carp::croak('State is not optional');
+		return;
+	}
 
-	die "State needs to be the full name" if(length($args{'state'}) == 2);
+	Carp::croak('State needs to be the full name') if(length($args{'state'}) == 2);
 
 	my $ua = delete $args{ua} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
 	$ua->env_proxy(1);
@@ -178,8 +187,7 @@ sub get_next_entry
 		die $resp->status_line();
 	}
 
-	my $data = $self->{'json'}->decode($resp->content());
-	return $data->{'pdf'};
+	return $self->{'json'}->decode($resp->content())->{'pdf'};
 }
 
 =head1 AUTHOR
