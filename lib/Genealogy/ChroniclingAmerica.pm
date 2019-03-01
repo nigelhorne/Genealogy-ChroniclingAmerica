@@ -92,6 +92,9 @@ sub new {
 	$rc->{'host'} = $args{'host'} || 'chroniclingamerica.loc.gov';
 
 	my %query_parameters = ( 'format' => 'json', 'state' => ucfirst(lc($args{'state'})) );
+	if($query_parameters{'state'} eq 'District of columbia') {
+		$query_parameters{'state'} = 'District of Columbia';
+	}
 	my $name = $args{'firstname'};
 	if($args{'middlename'}) {
 		$rc->{'name'} = "$name $args{middlename} $args{lastname}";
@@ -170,7 +173,8 @@ sub get_next_entry
 
 	my $text = $entry->{'ocr_eng'};
 
-	if($text !~ /$self->{'name'}/i) {
+	$text =~ s/[\r\n]/ /g;
+	if($text !~ /$self->{'name'}/ims) {
 		return $self->get_next_entry();
 	}
 
@@ -195,6 +199,9 @@ sub get_next_entry
 Nigel Horne, C<< <njh at bandsman.co.uk> >>
 
 =head1 BUGS
+
+If a middle name is given and no match is found,
+it should search again without the middle name.
 
 Please report any bugs or feature requests to C<bug-genealogy-chroniclingamerica at rt.cpan.org>,
 or through the web interface at

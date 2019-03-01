@@ -9,7 +9,7 @@ CHRONICLING: {
 	unless(-e 't/online.enabled') {
 		plan(skip_all => 'On-line tests disabled');
 	} else {
-		plan(tests => 15);
+		plan(tests => 19);
 
 		use_ok('Genealogy::ChroniclingAmerica');
 
@@ -58,6 +58,7 @@ CHRONICLING: {
 
 		$ca = Genealogy::ChroniclingAmerica->new({
 			'firstname' => 'harry',
+			'middlename' => 'james',
 			'lastname' => 'maxted',
 			'date_of_birth' => 1943,
 			'date_of_death' => 1943,
@@ -65,5 +66,15 @@ CHRONICLING: {
 		});
 		ok(defined($ca));
 		ok($ca->isa('Genealogy::ChroniclingAmerica'));
+
+		$count = 0;
+		while(my $link = $ca->get_next_entry()) {
+			diag($link);
+			uri_host_ok($link, 'chroniclingamerica.loc.gov');
+			ok($link =~ /\.pdf$/);
+			$count++;
+		}
+		ok(!defined($ca->get_next_entry()));
+		ok($count > 0);
 	}
 }
