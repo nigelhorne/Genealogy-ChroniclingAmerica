@@ -26,12 +26,12 @@ our $VERSION = '0.01';
     use Genealogy::ChroniclingAmerica;
 
     HTTP::Cache::Transparent::init({
-	BasePath => '/var/cache/loc'
+	BasePath => '/tmp/cache'
     });
     my $loc = Genealogy::ChroniclingAmerica->new({
 	firstname => 'John',
 	lastname => 'Smith',
-	country => 'Indiana',
+	state => 'Indiana',
 	date_of_death => 1862
     });
 
