@@ -32,13 +32,13 @@ CHRONICLING: {
 		ok(!defined($ca->get_next_entry()));
 		ok($count > 0);
 
-		$ca = Genealogy::ChroniclingAmerica->new({
+		$ca = Genealogy::ChroniclingAmerica->new(
 			'firstname' => 'mahalan',
 			'lastname' => 'sargent',
 			'date_of_birth' => 1895,
 			'date_of_death' => 1895,
 			'state' => 'Indiana',
-		});
+		);
 		ok(defined($ca));
 		ok($ca->isa('Genealogy::ChroniclingAmerica'));
 
