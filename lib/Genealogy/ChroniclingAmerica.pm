@@ -121,7 +121,7 @@ sub new {
 
 	if($resp->is_error()) {
 		Carp::carp("API returned error: on $url ", $resp->status_line());
-		return {};
+		return;
 	}
 
 	unless($resp->is_success()) {
