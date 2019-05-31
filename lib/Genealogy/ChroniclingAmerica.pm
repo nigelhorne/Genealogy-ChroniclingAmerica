@@ -48,9 +48,9 @@ Creates a Genealogy::ChroniclingAmerica object.
 It takes three mandatory arguments state, firstname and lastname.
 State must be the full name, not an abbreviation.
 
-There are four optional arguments: middlename, date_of_birth, date_of_death, ua and host.
-Host is the domain of the site to search, the default is chroniclingamerica.loc.gov.
-Ua is a pointer to an object that understands get and env_proxy messages, such
+There are four optional arguments: middlename, date_of_birth, date_of_death, ua and host:
+host is the domain of the site to search, the default is chroniclingamerica.loc.gov.
+ua is a pointer to an object that understands get and env_proxy messages, such
 as L<LWP::UserAgent::Throttled>.
 
 =cut
