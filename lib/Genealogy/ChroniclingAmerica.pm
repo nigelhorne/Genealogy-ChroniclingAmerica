@@ -85,8 +85,8 @@ sub new {
 
 	Carp::croak('State needs to be the full name') if(length($args{'state'}) == 2);
 
-	my $ua = delete $args{ua} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
-	$ua->env_proxy(1);
+	my $ua = $args{'ua'} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
+	$ua->env_proxy(1) unless(delete $args{'ua'});
 
 	my $rc = { ua => $ua };
 	$rc->{'host'} = $args{'host'} || 'chroniclingamerica.loc.gov';
@@ -116,11 +116,12 @@ sub new {
 	$uri->query_form(%query_parameters);
 	my $url = $uri->as_string();
 	# ::diag(">>>>$url = ", $rc->{'name'});
+	# print ">>>>$url = ", $rc->{'name'}, "\n";
 
 	my $resp = $ua->get($url);
 
 	if($resp->is_error()) {
-		Carp::carp("API returned error: on $url ", $resp->status_line());
+		Carp::carp("API returned error on $url: ", $resp->status_line());
 		return;
 	}
 
@@ -183,7 +184,8 @@ sub get_next_entry
 	my $resp = $self->{'ua'}->get($entry->{'url'});
 
 	if($resp->is_error()) {
-		Carp::carp("API returned error: on $entry->{url} ", $resp->status_line());
+		# print 'got: ', $resp->content(), "\n";
+		Carp::carp("get_next_entry: API returned error on $entry->{url}: ", $resp->status_line());
 		return;
 	}
 
