@@ -174,6 +174,10 @@ sub get_next_entry
 
 	my $text = $entry->{'ocr_eng'};
 
+	if(!defined($text)) {
+		return $self->get_next_entry();
+	}
+
 	$text =~ s/[\r\n]/ /g;
 	if($text !~ /$self->{'name'}/ims) {
 		return $self->get_next_entry();
