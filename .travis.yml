@@ -14,12 +14,12 @@ perl:
   - "5.14"
   - "5.12"
 
-sudo: false
-
 before_install:
   cpanm -n Devel::Cover::Report::Coveralls Test::Pod::Spelling::CommonMistakes Test::Portability::Files Test::Carp
 
 install:
+  - sudo apt-get update -q
+  - sudo apt-get install -y libdevel-cover-perl
   - cpanm -v --installdeps --notest .
 
 script:
