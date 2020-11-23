@@ -44,8 +44,7 @@ WriteMakefile(
 	'Test::NoWarnings' => 0,
 	'Test::URI' => 0,
 	# 'Test::Kwalitee' => 0,
-    },
-    PREREQ_PM => {
+    }, PREREQ_PM => {
     	'Carp' => 0,
     	'JSON' => 0,
 	'LWP::Protocol::https' => 0,
@@ -61,7 +60,11 @@ WriteMakefile(
 			type => 'git',
 			url => 'git://github.com/nigelhorne/Genealogy-ChroniclingAmerica.git',
 			web => 'https://github.com/nigelhorne/Genealogy-ChroniclingAmerica',
-    		},
+		}, bugtracker => {
+			# web => 'https://rt.cpan.org/Public/Dist/Display.html?Name=Genealogy-ChroniclingAmerica',
+			web => 'https://github.com/nigelhorne/Genealogy-ChroniclingAmerica/issues',
+			mailto => 'bug-Genealogy-ChroniclingAmerica@rt.cpan.org'
+		}, homepage => 'https://chroniclingamerica.loc.gov',
 	},
     },
     MIN_PERL_VERSION	=> '5.6.2'	# Probably would work, but never tested on earlier versions than this
