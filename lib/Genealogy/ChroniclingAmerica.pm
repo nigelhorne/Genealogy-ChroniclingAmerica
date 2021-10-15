@@ -4,7 +4,7 @@ package Genealogy::ChroniclingAmerica;
 use warnings;
 use strict;
 use LWP::UserAgent;
-use JSON;
+use JSON::MaybeXS;
 use URI;
 use Carp;
 
@@ -129,7 +129,7 @@ sub new {
 		die $resp->status_line();
 	}
 
-	$rc->{'json'} = JSON->new();
+	$rc->{'json'} = JSON::MaybeXS->new();
 	my $data = $rc->{'json'}->decode($resp->content());
 
 	# ::diag(Data::Dumper->new([$data])->Dump());
