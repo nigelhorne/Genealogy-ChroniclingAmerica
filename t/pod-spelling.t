@@ -20,5 +20,9 @@ if($@) {
 __END__
 AnnoCPAN
 CPAN
+firstname
 GPL
+lastname
+middlename
 RT
+ua
