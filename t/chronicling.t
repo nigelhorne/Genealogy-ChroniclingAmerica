@@ -35,7 +35,7 @@ CHRONICLING: {
 		$ca = Genealogy::ChroniclingAmerica->new(
 			'firstname' => 'mahalan',
 			'lastname' => 'sargent',
-			'date_of_birth' => 1895,
+			# 'date_of_birth' => 1895,
 			'date_of_death' => 1895,
 			'state' => 'Indiana',
 		);
