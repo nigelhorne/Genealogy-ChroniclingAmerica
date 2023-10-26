@@ -83,7 +83,10 @@ sub new {
 		return;
 	}
 
-	Carp::croak('State needs to be the full name') if(length($args{'state'}) == 2);
+	if(length($args{'state'}) == 2) {
+		Carp::croak('State needs to be the full name');
+		return;
+	}
 
 	my $ua = $args{'ua'} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
 	$ua->env_proxy(1) unless(delete $args{'ua'});
