@@ -8,17 +8,19 @@ use IO::Socket::INET;
 
 my $online_tests;
 
-if($ENV{RELEASE_TESTING}) {
+if($ENV{'AUTHOR_TESTING'}) {
 	$online_tests = are_online();
-} elsif($ENV{NO_NETWORK_TESTING}) {
-	$online_tests = 0;
 } else {
 	Getopt::Long::GetOptions('online-tests!' => \$online_tests);
 
 	if(!defined($online_tests)) {
 		$online_tests = are_online();
 	}
+	if(!$online_tests) {
+		print "On-line tests have been disabled\n";
+	}
 }
+
 
 if($online_tests) {
 	open(my $enabled, '>', 't/online.enabled') || die "Can't touch t/online.enabled $!";
@@ -72,18 +74,17 @@ WriteMakefile(
 
 sub are_online
 {
-	my $host = 'chroniclingamerica.loc.gov:80';
+	my $host = 'chroniclingamerica.loc.gov:443';
 
-	if($ENV{'http_proxy'} && ($ENV{'http_proxy'} =~ /^.+\/\/(\w+:\d+)$/)) {
+	if($ENV{'https_proxy'} && ($ENV{'https_proxy'} =~ /^.+\/\/(\w+:\d+)$/)) {
 		$host = $1;
-	} elsif($ENV{'HTTP_PROXY'} && ($ENV{'HTTP_PROXY'} =~ /^.+\/\/(\w+:\d+)$/)) {
+	} elsif($ENV{'HTTPS_PROXY'} && ($ENV{'HTTPS_PROXY'} =~ /^.+\/\/(\w+:\d+)$/)) {
 		$host = $1;
 	}
-	my $s = IO::Socket::INET->new(
+	if(my $s = IO::Socket::INET->new(
 		PeerAddr => $host,
 		Timeout => 5
-	);
-	if($s) {
+	)) {
 		if($ENV{'AUTOMATED_TESTING'}) {
 			close($s);
 			return 1;

@@ -237,10 +237,6 @@ You can also look for information at:
 
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-ChroniclingAmerica>
 
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Genealogy-ChroniclingAmerica>
-
 =item * Search CPAN
 
 L<https://metacpan.org/release/Genealogy-ChroniclingAmerica>
@@ -249,7 +245,7 @@ L<https://metacpan.org/release/Genealogy-ChroniclingAmerica>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2018,2019 Nigel Horne.
+Copyright 2018-2024 Nigel Horne.
 
 This program is released under the following licence: GPL2
 
