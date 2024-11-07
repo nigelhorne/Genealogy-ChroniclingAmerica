@@ -5,6 +5,7 @@ Revision history for Genealogy-ChroniclingAmerica
 	Use Test::DescribeMe to simplify tests
 	Use gtar to create a distribution on Macs
 	Calling new on an object now returns a clone rather than setting the defaults in the new object
+	Added support for GitHub actions
 
 0.03	Sun 17 Nov 09:58:53 EST 2019
 	Fixed "Use of uninitialized value $text in substitution"
