@@ -31,6 +31,15 @@ if($online_tests) {
 	exit(0);
 }
 
+my $dist = {
+	COMPRESS => 'gzip -9f',
+	SUFFIX => 'gz'
+};
+
+if($^O eq 'darwin') {
+	$dist->{'TAR'} = 'gtar';
+}
+
 WriteMakefile(
     NAME		=> 'Genealogy::ChroniclingAmerica',
     AUTHOR		=> q{Nigel Horne <njh@bandsman.co.uk>},
@@ -42,7 +51,9 @@ WriteMakefile(
       : ()),
     PL_FILES	=> {},
     TEST_REQUIRES => {
+	'Test::DescribeMe' => 0,
 	'Test::Most' => 0,
+	'Test::Needs' => 0,
 	'Test::NoWarnings' => 0,
 	'Test::URI' => 0,
 	# 'Test::Kwalitee' => 0,
@@ -51,9 +62,9 @@ WriteMakefile(
     	'JSON::MaybeXS' => 0,
 	'LWP::Protocol::https' => 0,
 	'LWP::UserAgent' => 0,
+	'Scalar::Util' => 0,
     	'URI' => 0,
-    },
-    dist		=> { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+    }, dist => $dist,
     clean		=> { FILES => 'Genealogy-ChroniclingAmerica-*' },
     META_MERGE		=> {
     	'meta-spec' => { version => 2 },

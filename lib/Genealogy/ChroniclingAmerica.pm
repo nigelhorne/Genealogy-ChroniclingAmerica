@@ -3,8 +3,10 @@ package Genealogy::ChroniclingAmerica;
 # https://chroniclingamerica.loc.gov/search/pages/results/?state=Indiana&andtext=james=serjeant&date1=1894&date2=1896&format=json
 use warnings;
 use strict;
+
 use LWP::UserAgent;
 use JSON::MaybeXS;
+use Scalar::Util;
 use URI;
 use Carp;
 
@@ -56,11 +58,11 @@ as L<LWP::UserAgent::Throttled>.
 =cut
 
 sub new {
-	my $proto = shift;
-	my $class = ref($proto) || $proto;
+	my $class = shift;
 
 	return unless(defined($class));
 
+	# Handle hash or hashref arguments
 	my %args;
 	if(ref($_[0]) eq 'HASH') {
 		%args = %{$_[0]};
@@ -147,6 +149,18 @@ sub new {
 		$rc->{'query_parameters'} = \%query_parameters;
 		$rc->{'items'} = $data->{'items'};
 		$rc->{'index'} = 0;
+	}
+
+	if(!defined($class)) {
+		# Using Genealogy::ChroniclingAmerica->new(), not Genealogy::ChroniclingAmerica::new()
+		# carp(__PACKAGE__, ' use ->new() not ::new() to instantiate');
+		# return;
+
+		# FIXME: this only works when no arguments are given
+		$class = __PACKAGE__;
+	} elsif(Scalar::Util::blessed($class)) {
+		# If $class is an object, clone it with new arguments
+		return bless { %{$class}, %args }, ref($class);
 	}
 
 	return bless $rc, $class;
