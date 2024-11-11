@@ -72,6 +72,18 @@ sub new {
 		%args = @_;
 	}
 
+	if(!defined($class)) {
+		# Using Genealogy::ChroniclingAmerica->new(), not Genealogy::ChroniclingAmerica::new()
+		# carp(__PACKAGE__, ' use ->new() not ::new() to instantiate');
+		# return;
+
+		# FIXME: this only works when no arguments are given
+		$class = __PACKAGE__;
+	} elsif(Scalar::Util::blessed($class)) {
+		# If $class is an object, clone it with new arguments
+		return bless { %{$class}, %args }, ref($class);
+	}
+
 	unless($args{'firstname'}) {
 		Carp::croak('First name is not optional');
 		return;	# Don't know why this is needed, but it is
@@ -151,18 +163,6 @@ sub new {
 		$rc->{'query_parameters'} = \%query_parameters;
 		$rc->{'items'} = $data->{'items'};
 		$rc->{'index'} = 0;
-	}
-
-	if(!defined($class)) {
-		# Using Genealogy::ChroniclingAmerica->new(), not Genealogy::ChroniclingAmerica::new()
-		# carp(__PACKAGE__, ' use ->new() not ::new() to instantiate');
-		# return;
-
-		# FIXME: this only works when no arguments are given
-		$class = __PACKAGE__;
-	} elsif(Scalar::Util::blessed($class)) {
-		# If $class is an object, clone it with new arguments
-		return bless { %{$class}, %args }, ref($class);
 	}
 
 	return bless $rc, $class;
