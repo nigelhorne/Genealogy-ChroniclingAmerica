@@ -91,10 +91,12 @@ sub new {
 	}
 
 	my $ua = $args{'ua'} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
-	$ua->env_proxy(1) unless(delete $args{'ua'});
+	$ua->env_proxy(1) unless($args{'ua'});
 
-	my $rc = { ua => $ua };
-	$rc->{'host'} = $args{'host'} || 'chroniclingamerica.loc.gov';
+	my $rc = {
+		ua => $ua,
+		host => $args{'host'} || 'chroniclingamerica.loc.gov'
+	};
 
 	my %query_parameters = ( 'format' => 'json', 'state' => ucfirst(lc($args{'state'})) );
 	if($query_parameters{'state'} eq 'District of columbia') {

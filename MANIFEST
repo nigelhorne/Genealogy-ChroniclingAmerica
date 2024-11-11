@@ -17,6 +17,7 @@ t/eof.t
 t/eol.t
 t/kwalitee.t
 t/manifest.t
+t/modules-used.t
 t/no404s.t
 t/noopentickets.t
 t/pod-cm.t
@@ -28,5 +29,4 @@ t/port.t
 t/snippets.t
 t/strict.t
 t/unused.t
-t/used.t
 t/vars.t
