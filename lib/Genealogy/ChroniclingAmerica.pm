@@ -176,19 +176,17 @@ sub get_next_entry
 {
 	my $self = shift;
 
-	return if($self->{'matches'} == 0);
+	# Exit if no matches or index out of bounds
+	return if($self->{'matches'} == 0) || ($self->{'index'} >= $self->{'matches'});
 
-	if($self->{'index'} >= $self->{'matches'}) {
-		return;
-	}
-
-	my $entry = @{$self->{'items'}}[$self->{'index'}];
-	$self->{'index'}++;
+	# Retrieve the next entry and increment index
+	my $entry = $self->{'items'}->[$self->{'index'}++];
 
 	if(!defined($entry->{'url'})) {
 		return $self->get_next_entry();
 	}
 
+	# Clean up OCR text
 	my $text = $entry->{'ocr_eng'};
 
 	if(!defined($text)) {
@@ -202,8 +200,10 @@ sub get_next_entry
 
 	# ::diag(Data::Dumper->new([$entry])->Dump());
 
+	# Make the API request
 	my $resp = $self->{'ua'}->get($entry->{'url'});
 
+	# Handle error responses
 	if($resp->is_error()) {
 		# print 'got: ', $resp->content(), "\n";
 		Carp::carp("get_next_entry: API returned error on $entry->{url}: ", $resp->status_line());
@@ -214,6 +214,7 @@ sub get_next_entry
 		die $resp->status_line();
 	}
 
+	# Decode JSON response and return PDF data
 	return $self->{'json'}->decode($resp->content())->{'pdf'};
 }
 
