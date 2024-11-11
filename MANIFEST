@@ -16,11 +16,11 @@ t/dist.t
 t/eof.t
 t/eol.t
 t/kwalitee.t
-t/links.t
 t/manifest.t
 t/no404s.t
 t/noopentickets.t
 t/pod-cm.t
+t/pod-links.t
 t/pod-spelling.t
 t/pod-synopsis.t
 t/pod.t
