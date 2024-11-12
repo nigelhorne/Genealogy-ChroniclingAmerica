@@ -2,14 +2,16 @@
 
 use strict;
 use warnings;
+
 use Test::Most;
+use Test::NoWarnings;
 use Test::URI;
 
 CHRONICLING: {
 	unless(-e 't/online.enabled') {
 		plan(skip_all => 'On-line tests disabled');
 	} else {
-		plan(tests => 19);
+		plan(tests => 20);
 
 		use_ok('Genealogy::ChroniclingAmerica');
 
