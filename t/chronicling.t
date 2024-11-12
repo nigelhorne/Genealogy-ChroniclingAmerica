@@ -5,6 +5,7 @@ use warnings;
 
 use Test::Most;
 use Test::NoWarnings;
+use Test::RequiresInternet ('chroniclingamerica.loc.gov' => 'https');
 use Test::URI;
 
 CHRONICLING: {

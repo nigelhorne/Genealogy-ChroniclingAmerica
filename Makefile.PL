@@ -55,28 +55,31 @@ WriteMakefile(
 	'Test::Most' => 0,
 	'Test::Needs' => 0,
 	'Test::NoWarnings' => 0,
+	'Test::RequiresInternet' => 0,
 	'Test::URI' => 0,
 	# 'Test::Kwalitee' => 0,
     }, PREREQ_PM => {
-    	'Carp' => 0,
-    	'JSON::MaybeXS' => 0,
+	'Carp' => 0,
+	'JSON::MaybeXS' => 0,
 	'LWP::Protocol::https' => 0,
 	'LWP::UserAgent' => 0,
 	'Scalar::Util' => 0,
-    	'URI' => 0,
+	'URI' => 0
     }, dist => $dist,
     clean		=> { FILES => 'Genealogy-ChroniclingAmerica-*' },
     META_MERGE		=> {
-    	'meta-spec' => { version => 2 },
-    	resources => {
-    		repository => {
+	'meta-spec' => { version => 2 },
+	resources => {
+		repository => {
+			repository => 'https://github.com/nigelhorne/Genealogy-ChroniclingAmerica',
 			type => 'git',
 			url => 'git://github.com/nigelhorne/Genealogy-ChroniclingAmerica.git',
 			web => 'https://github.com/nigelhorne/Genealogy-ChroniclingAmerica',
 		}, bugtracker => {
+			mailto => 'bug-Genealogy-ChroniclingAmerica@rt.cpan.org',
+			url => 'https://github.com/nigelhorne/Genealogy-ChroniclingAmerica/issues',
 			# web => 'https://rt.cpan.org/Public/Dist/Display.html?Name=Genealogy-ChroniclingAmerica',
-			web => 'https://github.com/nigelhorne/Genealogy-ChroniclingAmerica/issues',
-			mailto => 'bug-Genealogy-ChroniclingAmerica@rt.cpan.org'
+			web => 'https://github.com/nigelhorne/Genealogy-ChroniclingAmerica/issues'
 		}, homepage => 'https://chroniclingamerica.loc.gov',
 	},
     },
