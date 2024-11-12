@@ -11,7 +11,6 @@ t/10-new.t
 t/carp.t
 t/chronicling.t
 t/comment-spelling.t
-t/coverage.t
 t/dist.t
 t/eof.t
 t/eol.t
@@ -21,12 +20,13 @@ t/modules-used.t
 t/no404s.t
 t/noopentickets.t
 t/pod-cm.t
+t/pod-coverage.t
 t/pod-links.t
+t/pod-snippets.t
 t/pod-spelling.t
 t/pod-synopsis.t
 t/pod.t
 t/port.t
-t/snippets.t
 t/strict.t
 t/unused.t
 t/vars.t
