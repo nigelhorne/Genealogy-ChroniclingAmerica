@@ -91,9 +91,9 @@ sub are_online
 	my $host = 'chroniclingamerica.loc.gov:443';
 
 	if($ENV{'https_proxy'} && ($ENV{'https_proxy'} =~ /^.+\/\/(\w+:\d+)$/)) {
-		$host = $1;
+		$host = "$1:3128";
 	} elsif($ENV{'HTTPS_PROXY'} && ($ENV{'HTTPS_PROXY'} =~ /^.+\/\/(\w+:\d+)$/)) {
-		$host = $1;
+		$host = "$1:3128";
 	}
 	if(my $s = IO::Socket::INET->new(
 		PeerAddr => $host,
