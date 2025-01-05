@@ -116,6 +116,12 @@ sub new {
 		return;
 	}
 
+	# Fail when the input contains a number
+	if($args{'state'} =~ /\d/) {
+		Carp::croak('Usage: ', __PACKAGE__, ": invalid input to new(), $args{state}");
+		return;
+	}
+
 	my $ua = $args{'ua'} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
 	$ua->env_proxy(1) unless($args{'ua'});
 
