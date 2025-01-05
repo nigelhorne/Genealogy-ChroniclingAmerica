@@ -88,6 +88,13 @@ sub new {
 		Carp::croak('First name is not optional');
 		return;	# Don't know why this is needed, but it is
 	}
+
+	# Fail when the input is just a set of numbers
+	if($args{'firstname'} !~ /\D/) {
+		Carp::croak('Usage: ', __PACKAGE__, ": invalid input to new(), $args{firstname}");
+		return;
+	}
+
 	unless(defined($args{'lastname'})) {
 		Carp::croak('Last name is not optional');
 		return;
@@ -262,7 +269,7 @@ L<https://metacpan.org/release/Genealogy-ChroniclingAmerica>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2018-2024 Nigel Horne.
+Copyright 2018-2025 Nigel Horne.
 
 This program is released under the following licence: GPL2
 
