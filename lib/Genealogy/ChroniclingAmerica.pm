@@ -99,6 +99,13 @@ sub new {
 		Carp::croak('Last name is not optional');
 		return;
 	}
+
+	# Fail when the input is just a set of numbers
+	if($args{'lastname'} !~ /\D/) {
+		Carp::croak('Usage: ', __PACKAGE__, ": invalid input to new(), $args{lastname}");
+		return;
+	}
+
 	unless($args{'state'}) {
 		Carp::croak('State is not optional');
 		return;
