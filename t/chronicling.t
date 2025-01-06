@@ -4,18 +4,19 @@ use strict;
 use warnings;
 
 use Test::Most;
-use Test::NoWarnings;
 use Test::RequiresInternet ('chroniclingamerica.loc.gov' => 'https');
 use Test::URI;
+
+BEGIN {
+	plan(skip_all => 'NO_NETWORK_TESTING set') if $ENV{'NO_NETWORK_TESTING'};
+	plan(tests => 19);
+	use_ok('Genealogy::ChroniclingAmerica');
+}
 
 CHRONICLING: {
 	unless(-e 't/online.enabled') {
 		plan(skip_all => 'On-line tests disabled');
 	} else {
-		plan(tests => 20);
-
-		use_ok('Genealogy::ChroniclingAmerica');
-
 		my $ca = Genealogy::ChroniclingAmerica->new({
 			'firstname' => 'ralph',
 			'lastname' => 'bixler',
