@@ -41,6 +41,21 @@ our $VERSION = '0.04';
 	print "$url\n";
     }
 
+=head1 DESCRIPTION
+
+=item * Rate-Limiting
+
+A minimum interval between successive API calls can be enforced to ensure that the API is not overwhelmed and to comply with any request throttling requirements.
+
+Rate-limiting is implemented using L<Time::HiRes>.
+A minimum interval between API
+calls can be specified via the C<min_interval> parameter in the constructor.
+Before making an API call,
+the module checks how much time has elapsed since the
+last request and,
+if necessary,
+sleeps for the remaining time.
+
 =head1 SUBROUTINES/METHODS
 
 =head2 new
@@ -80,7 +95,7 @@ sub new {
 		%args = %{$_[0]};
 	} elsif(ref($_[0]) || !defined($_[0])) {
 		Carp::croak('Usage: ', __PACKAGE__, '->new(%args)');
-	} elsif(@_ % 2 == 0) {
+	} elsif((@_ % 2) == 0) {
 		%args = @_;
 	}
 
@@ -137,9 +152,14 @@ sub new {
 	my $ua = $args{'ua'} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
 	$ua->env_proxy(1) unless($args{'ua'});
 
+	# Set up rate-limiting: minimum interval between requests (in seconds)
+	my $min_interval = $args{min_interval} || 0;	# default: no delay
+
 	my $rc = {
+		%args,
+		min_interval => $min_interval,
 		ua => $ua,
-		host => $args{'host'} || 'chroniclingamerica.loc.gov'
+		host => $args{'host'} || 'chroniclingamerica.loc.gov',
 	};
 
 	my %query_parameters = ( 'format' => 'json', 'state' => ucfirst(lc($args{'state'})) );
@@ -180,8 +200,18 @@ sub new {
 		die $resp->status_line();
 	}
 
+	# Update last_request timestamp
+	$rc->{'last_request'} = time();
+
 	$rc->{'json'} = JSON::MaybeXS->new();
-	my $data = $rc->{'json'}->decode($resp->content());
+	my $data;
+
+	eval { $data = $rc->{'json'}->decode($resp->content()) };
+
+	if($@) {
+		Carp::carp("Failed to parse JSON response: $@");
+		return;
+	}
 
 	# ::diag(Data::Dumper->new([$data])->Dump());
 
@@ -234,8 +264,18 @@ sub get_next_entry
 
 	# ::diag(Data::Dumper->new([$entry])->Dump());
 
+	# Enforce rate-limiting: ensure at least min_interval seconds between requests.
+	my $now = time();
+	my $elapsed = $now - $self->{last_request};
+	if($elapsed < $self->{min_interval}) {
+		Time::HiRes::sleep($self->{min_interval} - $elapsed);
+	}
+
 	# Make the API request
 	my $resp = $self->{'ua'}->get($entry->{'url'});
+
+	# Update last_request timestamp
+	$self->{last_request} = time();
 
 	# Handle error responses
 	if($resp->is_error()) {
