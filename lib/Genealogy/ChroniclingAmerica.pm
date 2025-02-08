@@ -79,8 +79,18 @@ sleeps for the remaining time.
 
 Creates a Genealogy::ChroniclingAmerica object.
 
-It takes three mandatory arguments state, firstname and lastname.
-State must be the full name, not an abbreviation.
+It takes three mandatory arguments:
+
+=over 4
+
+=item * C<state> - Must be the full name,
+not an abbreviation.
+
+=item * C<firstname>
+
+=item * C<lastname>
+
+=back
 
 Accepts the following optional arguments:
 
@@ -97,7 +107,7 @@ Accepts the following optional arguments:
 =item * C<ua> - An object that understands get and env_proxy messages,
 such as L<LWP::UserAgent::Throttled>.
 
-=item * C<min_interval> - Amont to rate limit.
+=item * C<min_interval> - Amount to rate limit.
 
 =back
 

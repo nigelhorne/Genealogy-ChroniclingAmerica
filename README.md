@@ -59,8 +59,12 @@ this module streamlines access to historical newspaper archives with an easy-to-
 
 Creates a Genealogy::ChroniclingAmerica object.
 
-It takes three mandatory arguments state, firstname and lastname.
-State must be the full name, not an abbreviation.
+It takes three mandatory arguments:
+
+- `state` - Must be the full name,
+not an abbreviation.
+- `firstname`
+- `lastname`
 
 Accepts the following optional arguments:
 
@@ -70,7 +74,7 @@ Accepts the following optional arguments:
 - `host` - The domain of the site to search, the default is [https://chroniclingamerica.loc.gov](https://chroniclingamerica.loc.gov).
 - `ua` - An object that understands get and env\_proxy messages,
 such as [LWP::UserAgent::Throttled](https://metacpan.org/pod/LWP%3A%3AUserAgent%3A%3AThrottled).
-- `min_interval` - Amont to rate limit.
+- `min_interval` - Amount to rate limit.
 
 ## get\_next\_entry
 
