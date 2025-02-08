@@ -83,12 +83,12 @@ It takes three mandatory arguments:
 
 =over 4
 
-=item * C<state> - Must be the full name,
-not an abbreviation.
-
 =item * C<firstname>
 
 =item * C<lastname>
+
+=item * C<state> - Must be the full name,
+not an abbreviation.
 
 =back
 

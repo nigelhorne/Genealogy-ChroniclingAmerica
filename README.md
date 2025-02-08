@@ -61,10 +61,10 @@ Creates a Genealogy::ChroniclingAmerica object.
 
 It takes three mandatory arguments:
 
-- `state` - Must be the full name,
-not an abbreviation.
 - `firstname`
 - `lastname`
+- `state` - Must be the full name,
+not an abbreviation.
 
 Accepts the following optional arguments:
 
