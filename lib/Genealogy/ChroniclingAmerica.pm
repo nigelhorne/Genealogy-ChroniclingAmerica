@@ -43,6 +43,21 @@ our $VERSION = '0.04';
 
 =head1 DESCRIPTION
 
+The **Genealogy::ChroniclingAmerica** Perl module allows users to search for historical newspaper records from the **Chronicling America** archive,
+maintained by the Library of Congress.
+By providing a person's first name,
+last name,
+and state,
+the module constructs and executes search queries,
+retrieving URLs to relevant newspaper pages in JSON format.
+It supports additional filters like date of birth and date of death,
+enforces **rate-limiting** to comply with API request limits,
+and includes robust error handling and validation.
+Ideal for genealogy research,
+this module streamlines access to historical newspaper archives with an easy-to-use interface.
+
+=over 4
+
 =item * Rate-Limiting
 
 A minimum interval between successive API calls can be enforced to ensure that the API is not overwhelmed and to comply with any request throttling requirements.
@@ -55,6 +70,8 @@ the module checks how much time has elapsed since the
 last request and,
 if necessary,
 sleeps for the remaining time.
+
+=back
 
 =head1 SUBROUTINES/METHODS
 
@@ -79,6 +96,8 @@ Accepts the following optional arguments:
 
 =item * C<ua> - An object that understands get and env_proxy messages,
 such as L<LWP::UserAgent::Throttled>.
+
+=item * C<min_interval> - Amont to rate limit.
 
 =back
 
