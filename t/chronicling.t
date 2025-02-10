@@ -3,13 +3,14 @@
 use strict;
 use warnings;
 
+use Test::HTTPStatus;
 use Test::Most;
 use Test::RequiresInternet ('chroniclingamerica.loc.gov' => 'https');
 use Test::URI;
 
 BEGIN {
 	plan(skip_all => 'NO_NETWORK_TESTING set') if $ENV{'NO_NETWORK_TESTING'};
-	plan(tests => 19);
+	plan(tests => 21);
 	use_ok('Genealogy::ChroniclingAmerica');
 }
 
@@ -30,6 +31,7 @@ CHRONICLING: {
 		while(my $link = $ca->get_next_entry()) {
 			diag($link);
 			uri_host_ok($link, 'chroniclingamerica.loc.gov');
+			http_ok($link, HTTP_OK);
 			ok($link =~ /\.pdf$/);
 			$count++;
 		}
@@ -75,6 +77,7 @@ CHRONICLING: {
 		while(my $link = $ca->get_next_entry()) {
 			diag($link);
 			uri_host_ok($link, 'chroniclingamerica.loc.gov');
+			http_ok($link, HTTP_OK);
 			ok($link =~ /\.pdf$/);
 			$count++;
 		}

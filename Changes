@@ -4,6 +4,7 @@ Revision history for Genealogy-ChroniclingAmerica
 	Connect to squid port when proxy is set
 	Added argument testing
 	Added rate-limiting and caching support
+	Use Test::HTTPStatus
 
 0.04	Tue Nov 12 07:47:07 EST 2024
 	Allow new() to take a ref to a hash of arguments
