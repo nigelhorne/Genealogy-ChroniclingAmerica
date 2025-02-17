@@ -4,7 +4,7 @@ Genealogy::ChroniclingAmerica - Find URLs for a given person on the Library of C
 
 # VERSION
 
-Version 0.04
+Version 0.05
 
 # SYNOPSIS
 
@@ -89,18 +89,20 @@ Nigel Horne, `<njh at bandsman.co.uk>`
 If a middle name is given and no match is found,
 it should search again without the middle name.
 
-Please report any bugs or feature requests to `bug-genealogy-chroniclingamerica at rt.cpan.org`,
-or through the web interface at
-[http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-ChroniclingAmerica](http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-ChroniclingAmerica).
-I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
 # SEE ALSO
 
 [https://github.com/nigelhorne/gedcom](https://github.com/nigelhorne/gedcom)
 [https://chroniclingamerica.loc.gov](https://chroniclingamerica.loc.gov)
 
 # SUPPORT
+
+This module is provided as-is without any warranty.
+
+Please report any bugs or feature requests to `bug-genealogy-chroniclingamerica at rt.cpan.org`,
+or through the web interface at
+[http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-ChroniclingAmerica](http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-ChroniclingAmerica).
+I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
