@@ -35,7 +35,7 @@ jobs:
         env:
           AUTOMATED_TESTING: 1
         run: |
-          cpanm -iqn ExtUtils::MakeMaker Test::Most || (find . -name build.log | xargs cat)
+          cpanm -ivn ExtUtils::MakeMaker Test::Most || (find . -name build.log | xargs cat)
           cpanm -iqn --skip-satisfied --installdeps --notest .
       - name: Make Module
         env:

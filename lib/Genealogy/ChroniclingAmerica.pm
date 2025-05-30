@@ -122,14 +122,7 @@ sub new {
 	# Handle hash or hashref arguments
 	my $params = Params::Get::get_params(undef, \@_) || {};
 
-	if(!defined($class)) {
-		# Using Genealogy::ChroniclingAmerica->new(), not Genealogy::ChroniclingAmerica::new()
-		# carp(__PACKAGE__, ' use ->new() not ::new() to instantiate');
-		# return;
-
-		# FIXME: this only works when no arguments are given
-		$class = __PACKAGE__;
-	} elsif(Scalar::Util::blessed($class)) {
+	if(Scalar::Util::blessed($class)) {
 		# If $class is an object, clone it with new arguments
 		return bless { %{$class}, %{$params} }, ref($class);
 	}
