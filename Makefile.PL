@@ -40,7 +40,7 @@ if($ENV{'AUTHOR_TESTING'}) {
 if($online_tests) {
 	open(my $enabled, '>', 't/online.enabled') || die "Can't touch t/online.enabled $!";
 	close($enabled) || die "Can't touch t/online.enabled $!";
-} else {
+} elsif(!$ENV{'AUTOMATED_TESTING'}) {
 	unlink('t/online.enabled');
 	print STDERR "NA: Genealogy::ChroniclingAmerica needs a permanent connexion to the Internet\n";
 	exit(0);
