@@ -6,6 +6,21 @@ use Getopt::Long;	# Technique inspired by IO::Lambda
 use ExtUtils::MakeMaker 6.64;	# 6.64 for TEST_REQUIRES
 use IO::Socket::INET;
 
+# Test for broken smokers that don't set AUTOMATED_TESTING
+if(my $reporter = $ENV{'PERL_CPAN_REPORTER_CONFIG'}) {
+	if($reporter =~ /smoker/i) {
+		warn 'AUTOMATED_TESTING added for you' if(!defined($ENV{'AUTOMATED_TESTING'}));
+		$ENV{'AUTOMATED_TESTING'} = 1;
+	}
+}
+
+if(defined($ENV{'GITHUB_ACTION'}) || defined($ENV{'CIRCLECI'}) || defined($ENV{'TRAVIS_PERL_VERSION'}) || defined($ENV{'APPVEYOR'})) {
+	# Prevent downloading and installing stuff
+	warn 'AUTOMATED_TESTING added for you' if(!defined($ENV{'AUTOMATED_TESTING'}));
+	$ENV{'AUTOMATED_TESTING'} = 1;
+	$ENV{'NO_NETWORK_TESTING'} = 1;
+}
+
 my $online_tests;
 
 if($ENV{'AUTHOR_TESTING'}) {
@@ -90,6 +105,7 @@ WriteMakefile(
 
 sub are_online
 {
+	return 0 if($ENV{'NO_NETWORK_TESTING'} || $ENV{'CIRCLECI'} || $ENV{'TRAVIS_PERL_VERSION'} || $ENV{'AUTOMATED_TESTING'} || $ENV{'NONINTERACTIVE_TESTING'} || (!-t STDIN));
 	my $host = 'chroniclingamerica.loc.gov:443';
 
 	if($ENV{'https_proxy'} && ($ENV{'https_proxy'} =~ /^.+\/\/(\w+:\d+)$/)) {

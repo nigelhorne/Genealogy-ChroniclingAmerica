@@ -1,5 +1,8 @@
 Revision history for Genealogy-ChroniclingAmerica
 
+0.06
+	Better handling of NO_NETWORK_TESTING
+
 0.05	Mon Feb 17 08:57:27 EST 2025
 	Connect to squid port when proxy is set
 	Added argument testing
