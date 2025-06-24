@@ -44,7 +44,7 @@ our $VERSION = '0.05';
 
 =head1 DESCRIPTION
 
-The **Genealogy::ChroniclingAmerica** Perl module allows users to search for historical newspaper records from the **Chronicling America** archive,
+The **Genealogy::ChroniclingAmerica** module allows users to search for historical newspaper records from the **Chronicling America** archive,
 maintained by the Library of Congress.
 By providing a person's first name,
 last name,
