@@ -82,6 +82,7 @@ WriteMakefile(
 	'LWP::UserAgent' => 0,
 	'Object::Configure' => 0,
 	'Params::Get' => 0,
+	'Return::Set' => 0,
 	'Scalar::Util' => 0,
 	'URI' => 0
     }, dist => $dist,

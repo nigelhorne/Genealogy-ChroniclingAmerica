@@ -10,6 +10,7 @@ use JSON::MaybeXS;
 use Object::Configure;
 use Params::Get;
 use Scalar::Util;
+use Return::Set 0.02;
 use URI;
 
 =head1 NAME
@@ -308,7 +309,7 @@ sub get_next_entry
 	}
 
 	# Decode JSON response and return PDF data
-	return $self->{'json'}->decode($resp->content())->{'pdf'};
+	return Return::Set::set_return($self->{'json'}->decode($resp->content())->{'pdf'}, { type => 'string', 'min' => 5, matches => qr/\.pdf$/ });
 }
 
 =head1 AUTHOR
