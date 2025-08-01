@@ -7,6 +7,7 @@ use strict;
 use Carp;
 use LWP::UserAgent;
 use JSON::MaybeXS;
+use Object::Configure;
 use Params::Get;
 use Scalar::Util;
 use URI;
@@ -167,6 +168,8 @@ sub new {
 
 	my $ua = $params->{'ua'} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
 	$ua->env_proxy(1) unless($params->{'ua'});
+
+	$params = Object::Configure::configure($class, $params);
 
 	# Set up rate-limiting: minimum interval between requests (in seconds)
 	my $min_interval = $params->{min_interval} || 0;	# default: no delay
