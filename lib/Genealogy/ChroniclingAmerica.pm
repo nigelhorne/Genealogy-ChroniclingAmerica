@@ -299,7 +299,6 @@ sub get_next_entry
 	if($resp->is_error()) {
 		# print 'got: ', $resp->content(), "\n";
 		Carp::carp("get_next_entry: API returned error on $entry->{id}: ", $resp->status_line()) unless($resp->code() == 404);
-		Carp::carp("get_next_entry: API returned error on $entry->{id}: ", $resp->status_line());
 		return;
 	}
 
@@ -309,6 +308,7 @@ sub get_next_entry
 
 	my $data = decode_json($resp->decoded_content());
 	# ::diag(__LINE__);
+	# ::diag($data->{full_text});
 	foreach my $page(@{$data->{'page'}}) {
 		if($page->{'mimetype'} eq 'application/pdf') {
 			return Return::Set::set_return($page->{'url'}, { type => 'string', 'min' => 5, matches => qr/\.pdf$/ });
@@ -383,7 +383,7 @@ sub _get_items
 				if (my $item = $result->{id}) {
 					# Filter out links to Catalog or other platforms
 					if ($item =~ /^http:\/\/www\.loc\.gov\/resource/) {
-						my $resource = $item; # Assign item to resource
+						# my $resource = $item; # Assign item to resource
 						# push @$items_ref, $resource;
 						push @$items_ref, $result;
 					}

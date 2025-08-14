@@ -96,9 +96,10 @@ WriteMakefile(
 			web => 'https://github.com/nigelhorne/Genealogy-ChroniclingAmerica',
 		}, bugtracker => {
 			mailto => 'bug-Genealogy-ChroniclingAmerica@rt.cpan.org',
-			url => 'https://github.com/nigelhorne/Genealogy-ChroniclingAmerica/issues',
-			# web => 'https://rt.cpan.org/Public/Dist/Display.html?Name=Genealogy-ChroniclingAmerica',
-			web => 'https://github.com/nigelhorne/Genealogy-ChroniclingAmerica/issues'
+			url => 'https://rt.cpan.org/Public/Dist/Display.html?Name=Genealogy-ChroniclingAmerica',
+			web => 'https://rt.cpan.org/Public/Dist/Display.html?Name=Genealogy-ChroniclingAmerica',
+			# url => 'https://github.com/nigelhorne/Genealogy-ChroniclingAmerica/issues',
+			# web => 'https://github.com/nigelhorne/Genealogy-ChroniclingAmerica/issues'
 		}, homepage => 'https://chroniclingamerica.loc.gov',
 	},
     },

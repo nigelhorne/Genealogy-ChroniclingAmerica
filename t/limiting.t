@@ -37,7 +37,7 @@ BEGIN { use_ok('Genealogy::ChroniclingAmerica') }
 my $min_interval = 1;
 
 # Create our custom user agent
-my $ua = MyTestUA->new();
+my $ua = MyTestUA->new(agent => 'Testing git://github.com/nigelhorne/Genealogy-ChroniclingAmerica.git');
 
 # Instantiate with our custom UA and min_interval
 my $ca = Genealogy::ChroniclingAmerica->new(

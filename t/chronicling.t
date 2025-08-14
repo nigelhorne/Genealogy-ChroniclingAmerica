@@ -56,9 +56,7 @@ CHRONICLING: {
 		ok(defined($ca));
 		ok($ca->isa('Genealogy::ChroniclingAmerica'));
 
-diag('>>>>>>>>>>>>>');
-diag($ca->get_next_entry());
-		ok(!defined($ca->get_next_entry()));
+		ok(defined($ca->get_next_entry()));
 
 		$ca = Genealogy::ChroniclingAmerica->new({
 			'firstname' => 'harry',
