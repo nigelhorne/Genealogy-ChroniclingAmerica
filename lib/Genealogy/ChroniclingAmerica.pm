@@ -219,7 +219,7 @@ sub new {
 	# Set up rate-limiting: minimum interval between requests (in seconds)
 	# From https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/README.html#rate-limits
 	# Burst Limit: 20 requests per 1 minute, Block for 5 minutes
-	my $min_interval = $params->{min_interval} || 3;	# default: three second delay
+	my $min_interval = $params->{min_interval} || 4;	# default: four second delay
 
 	my $rc = {
 		%{$params},
@@ -237,11 +237,11 @@ sub new {
 	my $name = $params->{'firstname'};
 	if($params->{'middlename'}) {
 		$rc->{'name'} = "$name $params->{middlename} $params->{lastname}";
-		$name .= '=' . $params->{middlename};
+		$name .= '+' . $params->{middlename};
 	} else {
 		$rc->{'name'} = "$name $params->{lastname}";
 	}
-	$name .= "=$params->{lastname}";
+	$name .= "+$params->{lastname}";
 
 	$name =~ s/\s/+/g;
 
