@@ -372,7 +372,7 @@ sub get_next_entry
 # Run P1 search and get a list of results
 sub _get_items
 {
-	my ($ua, $url, $items_ref, $conditional) = @_;
+	my ($ua, $url, $items_ref, $conditional, $depth) = @_;
 
 	$items_ref ||= [];
 	$conditional ||= 'True';
@@ -444,9 +444,8 @@ sub _get_items
 		}
 
 		# Repeat the loop on the next page, unless we're on the last page
-		if (defined $data->{pagination}->{next}) {
-			my $next_url = $data->{pagination}->{next};
-			_get_items($ua, $next_url, $items_ref, $conditional);
+		if(($depth <= 10) && defined(my $next_url = $data->{pagination}->{next})) {
+			_get_items($ua, $next_url, $items_ref, $conditional, $depth + 1);
 		}
 
 		return $items_ref;
