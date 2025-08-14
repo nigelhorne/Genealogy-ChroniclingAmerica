@@ -175,7 +175,15 @@ sub new {
 		return;
 	}
 
-	my $ua = $params->{'ua'} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
+	my $ua = $params->{'ua'} || LWP::UserAgent->new(
+		ssl_opts => {
+			verify_hostname => 1,
+			# SSL_ca_file => '/etc/ssl/certs/ca-certificates.crt',	# Linux
+			SSL_ca_file => '/opt/homebrew/etc/ca-certificates/cert.pem',	# MacOS
+		},
+		agent => __PACKAGE__ . "/$VERSION"
+	);
+
 	$ua->env_proxy(1) unless($params->{'ua'});
 
 	$params = Object::Configure::configure($class, $params);
@@ -187,10 +195,11 @@ sub new {
 		%{$params},
 		min_interval => $min_interval,
 		ua => $ua,
-		host => $params->{'host'} || 'chroniclingamerica.loc.gov',
+		host => $params->{'host'} || 'www.loc.gov',
+		path => 'collections/chronicling-america',
 	};
 
-	my %query_parameters = ( 'format' => 'json', 'state' => ucfirst(lc($params->{'state'})) );
+	my %query_parameters = ( 'fo' => 'json', 'state' => ucfirst(lc($params->{'state'})), 'ops' => 'PHRASE', 'searchType' => 'advanced' );
 	if($query_parameters{'state'} eq 'District of columbia') {
 		$query_parameters{'state'} = 'District of Columbia';
 	}
@@ -203,56 +212,48 @@ sub new {
 	}
 	$name .= "=$params->{lastname}";
 
-	$query_parameters{'andtext'} = $name;
+	$name =~ s/\s/+/g;
+
+	$query_parameters{'qs'} = $name;
 	if($params->{'date_of_birth'}) {
-		$query_parameters{'date1'} = $params->{'date_of_birth'};
+		$query_parameters{'start_date'} = $params->{'date_of_birth'};
 	}
 	if($params->{'date_of_death'}) {
-		$query_parameters{'date2'} = $params->{'date_of_death'};
+		$query_parameters{'end_date'} = $params->{'date_of_death'};
 	}
 
-	my $uri = URI->new("https://$rc->{host}/search/pages/results/");
+	# Just scanning for one year
+	$query_parameters{'start_date'} ||= $params->{'date_of_death'};
+	$query_parameters{'end_date'} ||= $params->{'date_of_birth'};
+
+	$query_parameters{'start_date'} .= '-01-01';
+	$query_parameters{'end_date'} .= '-12-31';
+
+	my $uri = URI->new("https://$rc->{host}/$rc->{path}");
 	$uri->query_form(%query_parameters);
 	my $url = $uri->as_string();
 	# ::diag(">>>>$url = ", $rc->{'name'});
 	# print ">>>>$url = ", $rc->{'name'}, "\n";
 
-	my $resp = $ua->get($url);
-
-	if($resp->is_error()) {
-		Carp::carp("API returned error on $url: ", $resp->status_line());
-		return;
-	}
-
-	unless($resp->is_success()) {
-		die $resp->status_line();
-	}
+	my $items = _get_items($ua, $url);
 
 	# Update last_request timestamp
 	$rc->{'last_request'} = time();
 
-	$rc->{'json'} = JSON::MaybeXS->new();
-	my $data;
-
-	eval { $data = $rc->{'json'}->decode($resp->content()) };
-
-	if($@) {
-		Carp::carp("Failed to parse JSON response: $@");
-		return;
-	}
-
-	# ::diag(Data::Dumper->new([$data])->Dump());
-
-	my $matches = $data->{'totalItems'};
-	if($data->{'itemsPerPage'} < $matches) {
-		$matches = $data->{'itemsPerPage'};
-	}
-
-	$rc->{'matches'} = $matches;
-	if($matches) {
-		$rc->{'query_parameters'} = \%query_parameters;
-		$rc->{'items'} = $data->{'items'};
+	if(scalar(@{$items})) {
+		# Add 'fo=json' to the end of each row
+		my @rc;
+		for my $item (@{$items}) {
+			unless($item->{'id'} =~ /&fo=json$/) {
+				$item->{'id'} .= '&fo=json';
+			}
+			push @rc, $item;
+		}
+		$rc->{'items'} = \@rc;
 		$rc->{'index'} = 0;
+		$rc->{'matches'} = scalar(@rc);
+	} else {
+		$rc->{'matches'} = 0;
 	}
 
 	return bless $rc, $class;
@@ -274,22 +275,6 @@ sub get_next_entry
 	# Retrieve the next entry and increment index
 	my $entry = $self->{'items'}->[$self->{'index'}++];
 
-	if(!defined($entry->{'url'})) {
-		return $self->get_next_entry();
-	}
-
-	# Clean up OCR text
-	my $text = $entry->{'ocr_eng'};
-
-	if(!defined($text)) {
-		return $self->get_next_entry();
-	}
-
-	$text =~ s/[\r\n]/ /g;
-	if($text !~ /$self->{'name'}/ims) {
-		return $self->get_next_entry();
-	}
-
 	# ::diag(Data::Dumper->new([$entry])->Dump());
 
 	# Enforce rate-limiting: ensure at least min_interval seconds between requests.
@@ -300,7 +285,12 @@ sub get_next_entry
 	}
 
 	# Make the API request
-	my $resp = $self->{'ua'}->get($entry->{'url'});
+	# ::diag(__LINE__);
+	# ::diag(Data::Dumper->new([$entry])->Dump());
+	# ::diag($entry->{'id'});
+	my $resp = $self->{'ua'}->get($entry->{'id'});
+	# ::diag(__LINE__);
+	# ::diag(Data::Dumper->new([$resp])->Dump());
 
 	# Update last_request timestamp
 	$self->{last_request} = time();
@@ -308,7 +298,8 @@ sub get_next_entry
 	# Handle error responses
 	if($resp->is_error()) {
 		# print 'got: ', $resp->content(), "\n";
-		Carp::carp("get_next_entry: API returned error on $entry->{url}: ", $resp->status_line());
+		Carp::carp("get_next_entry: API returned error on $entry->{id}: ", $resp->status_line()) unless($resp->code() == 404);
+		Carp::carp("get_next_entry: API returned error on $entry->{id}: ", $resp->status_line());
 		return;
 	}
 
@@ -316,8 +307,103 @@ sub get_next_entry
 		die $resp->status_line();
 	}
 
-	# Decode JSON response and return PDF URL
-	return Return::Set::set_return($self->{'json'}->decode($resp->content())->{'pdf'}, { type => 'string', 'min' => 5, matches => qr/\.pdf$/ });
+	my $data = decode_json($resp->decoded_content());
+	# ::diag(__LINE__);
+	foreach my $page(@{$data->{'page'}}) {
+		if($page->{'mimetype'} eq 'application/pdf') {
+			return Return::Set::set_return($page->{'url'}, { type => 'string', 'min' => 5, matches => qr/\.pdf$/ });
+		}
+	}
+}
+
+# This is the sample program at https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/ChronAm-download_results.html
+#	translated into Perl
+
+# Run P1 search and get a list of results
+sub _get_items
+{
+	my ($ua, $url, $items_ref, $conditional) = @_;
+	$items_ref ||= [];
+	$conditional ||= 'True';
+	
+	# Check that the query URL is not an item or resource link
+	my @exclude = ("loc.gov/item", "loc.gov/resource");
+	for my $string (@exclude) {
+		if (index($url, $string) != -1) {
+			die 'Your URL points directly to an item or ',
+			  'resource page (you can tell because "item" ',
+			  'or "resource" is in the URL). Please use ',
+			  'a search URL instead. For example, instead ',
+			  'of "https://www.loc.gov/item/2009581123/", ',
+			  'try "https://www.loc.gov/maps/?q=2009581123".';
+		}
+	}
+	
+	# Create URI object and add parameters
+	my $uri = URI->new($url);
+	$uri->query_form(
+		$uri->query_form,
+		fo => 'json',
+		c => 100,
+		at => 'results,pagination'
+	);
+	
+	# Make HTTP request
+	# ::diag(__LINE__);
+	# ::diag($uri);
+	my $response = $ua->get($uri);
+	
+	# Check that the API request was successful
+	if ($response->is_success &&
+		$response->header('Content-Type') =~ /json/) {
+		
+		my $data = decode_json($response->decoded_content);
+		my $results = $data->{results};
+		
+		for my $result (@$results) {
+			# Filter out anything that's a collection or web page
+			my $original_format = $result->{original_format} || [];
+			my $filter_out = 0;
+			
+			# Check if original_format contains "collection" or "web page"
+			for my $format (@$original_format) {
+				if ($format =~ /collection/i || $format =~ /web page/i) {
+					$filter_out = 1;
+					last;
+				}
+			}
+			
+			# Evaluate conditional (simplified - assumes 'True' means true)
+			if ($conditional ne 'True') {
+				$filter_out = 1;
+			}
+			
+			unless ($filter_out) {
+				# Get the link to the item record
+				if (my $item = $result->{id}) {
+					# Filter out links to Catalog or other platforms
+					if ($item =~ /^http:\/\/www\.loc\.gov\/resource/) {
+						my $resource = $item; # Assign item to resource
+						# push @$items_ref, $resource;
+						push @$items_ref, $result;
+					}
+					if ($item =~ /^http:\/\/www\.loc\.gov\/item/) {
+						push @$items_ref, $result;
+					}
+				}
+			}
+		}
+		
+		# Repeat the loop on the next page, unless we're on the last page
+		if (defined $data->{pagination}->{next}) {
+			my $next_url = $data->{pagination}->{next};
+			_get_items($ua, $next_url, $items_ref, $conditional);
+		}
+		
+		return $items_ref;
+	}
+	Carp::carp($url, ': ', $response->status_line());
+	return $items_ref;
 }
 
 =head1 AUTHOR

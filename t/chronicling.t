@@ -26,13 +26,13 @@ CHRONICLING: {
 		my $count = 0;
 		while(my $link = $ca->get_next_entry()) {
 			diag($link);
-			uri_host_ok($link, 'chroniclingamerica.loc.gov');
+			uri_host_ok($link, 'tile.loc.gov');
 			http_ok($link, HTTP_OK);
 			ok($link =~ /\.pdf$/);
 			$count++;
 		}
 		ok(!defined($ca->get_next_entry()));
-		ok($count > 0);
+		cmp_ok($count, '>', 0, 'At least one match found');
 
 		$ca = Genealogy::ChroniclingAmerica->new(
 			'firstname' => 'mahalan',
@@ -56,6 +56,8 @@ CHRONICLING: {
 		ok(defined($ca));
 		ok($ca->isa('Genealogy::ChroniclingAmerica'));
 
+diag('>>>>>>>>>>>>>');
+diag($ca->get_next_entry());
 		ok(!defined($ca->get_next_entry()));
 
 		$ca = Genealogy::ChroniclingAmerica->new({
@@ -72,7 +74,7 @@ CHRONICLING: {
 		$count = 0;
 		while(my $link = $ca->get_next_entry()) {
 			diag($link);
-			uri_host_ok($link, 'chroniclingamerica.loc.gov');
+			uri_host_ok($link, 'tile.loc.gov');
 			http_ok($link, HTTP_OK);
 			ok($link =~ /\.pdf$/);
 			$count++;
