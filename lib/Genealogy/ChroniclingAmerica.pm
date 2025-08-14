@@ -376,6 +376,7 @@ sub _get_items
 
 	$items_ref ||= [];
 	$conditional ||= 'True';
+	$depth ||= 0;
 
 	# Check that the query URL is not an item or resource link
 	my @exclude = ("loc.gov/item", "loc.gov/resource");
@@ -405,7 +406,7 @@ sub _get_items
 	my $response = $ua->get($uri);
 
 	# Check that the API request was successful
-	if($response->is_success && $response->header('Content-Type') =~ /json/) {
+	if($response->is_success() && $response->header('Content-Type') =~ /json/) {
 		my $data = decode_json($response->decoded_content());
 		my $results = $data->{results};
 
@@ -444,6 +445,7 @@ sub _get_items
 		}
 
 		# Repeat the loop on the next page, unless we're on the last page
+		# Put the $depth in case the end of list code doesn't work
 		if(($depth <= 10) && defined(my $next_url = $data->{pagination}->{next})) {
 			_get_items($ua, $next_url, $items_ref, $conditional, $depth + 1);
 		}
