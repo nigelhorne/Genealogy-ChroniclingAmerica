@@ -36,7 +36,6 @@ if($ENV{'AUTHOR_TESTING'}) {
 	}
 }
 
-
 if($online_tests) {
 	open(my $enabled, '>', 't/online.enabled') || die "Can't touch t/online.enabled $!";
 	close($enabled) || die "Can't touch t/online.enabled $!";

@@ -1,6 +1,14 @@
 package Genealogy::ChroniclingAmerica;
 
-# https://chroniclingamerica.loc.gov/search/pages/results/?state=Indiana&andtext=james=serjeant&date1=1894&date2=1896&format=json
+# OLD API
+# https://chroniclingamerica.loc.gov/search/pages/results/?date1=1912&state=Indiana&format=json&andtext=ralph%3Dbixler
+
+# TODO: NEW API
+# https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/README.html
+# https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/ChronAm-download_results.html
+
+# https://www.loc.gov/collections/chronicling-america/?dl=page&end_date=1912-12-31&ops=PHRASE&qs=ralph+bixler&searchType=advanced&start_date=1912-01-01&fo=json
+
 use warnings;
 use strict;
 
@@ -308,7 +316,7 @@ sub get_next_entry
 		die $resp->status_line();
 	}
 
-	# Decode JSON response and return PDF data
+	# Decode JSON response and return PDF URL
 	return Return::Set::set_return($self->{'json'}->decode($resp->content())->{'pdf'}, { type => 'string', 'min' => 5, matches => qr/\.pdf$/ });
 }
 
@@ -325,6 +333,7 @@ it should search again without the middle name.
 
 L<https://github.com/nigelhorne/gedcom>
 L<https://chroniclingamerica.loc.gov>
+L<https://github.com/LibraryOfCongress/data-exploration>
 
 =head1 SUPPORT
 
