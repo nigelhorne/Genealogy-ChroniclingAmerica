@@ -7,7 +7,8 @@ use warnings;
 
 use CHI;
 use Time::HiRes qw(time);
-use Test::Most tests => 4;
+use Test::Most;
+use Test::RequiresInternet ('www.loc.gov' => 'https');
 
 BEGIN { use_ok('Genealogy::ChroniclingAmerica') }
 
@@ -30,7 +31,6 @@ BEGIN { use_ok('Genealogy::ChroniclingAmerica') }
 		# version of what the Chronicling America API might return.
 		# my $content = '{"totalItems": "1", "ocr_eng": "A piece of text about Ralph Bixler", "url": "https://example.com", "itemsPerPage": "20", "items": [{"sequence": 12}]}';
 		# return HTTP::Response->new(200, 'OK', [], $content);
-		::diag(__LINE__);
 		return $self->SUPER::get($url);
 	}
 }
@@ -69,3 +69,5 @@ if($num_requests >= 2) {
 } else {
 	fail("num requests too low: $num_requests");
 }
+
+done_testing();

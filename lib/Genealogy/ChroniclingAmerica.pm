@@ -230,10 +230,10 @@ sub new {
 		cache => $cache,
 	};
 
-	my %query_parameters = ( 'fo' => 'json', 'location_state' => lc($params->{'state'}), 'ops' => 'PHRASE', 'searchType' => 'advanced' );
-	# if($query_parameters{'location_state'} eq 'District of columbia') {
-		# $query_parameters{'location_state'} = 'District of Columbia';
-	# }
+	my %query_parameters = ( 'fo' => 'json', 'location_state' => ucfirst(lc($params->{'state'})), 'ops' => 'PHRASE', 'searchType' => 'advanced' );
+	if($query_parameters{'location_state'} eq 'District of columbia') {
+		$query_parameters{'location_state'} = 'District of Columbia';
+	}
 	my $name = $params->{'firstname'};
 	if($params->{'middlename'}) {
 		$rc->{'name'} = "$name $params->{middlename} $params->{lastname}";
@@ -265,8 +265,6 @@ sub new {
 	my $url = $uri->as_string();
 	# ::diag(">>>>$url = ", $rc->{'name'});
 	# print ">>>>$url = ", $rc->{'name'}, "\n";
-	::diag(__LINE__);
-	::diag($url);
 
 	my $items = _get_items($ua, $url);
 
@@ -303,8 +301,6 @@ sub get_next_entry
 	my $self = shift;
 
 	# Exit if no matches or index out of bounds
-	::diag(__LINE__);
-	::diag($self->{'index'}, '>=', $self->{'matches'});
 	return if($self->{'matches'} == 0) || ($self->{'index'} >= $self->{'matches'});
 
 	# Retrieve the next entry and increment index
@@ -315,8 +311,6 @@ sub get_next_entry
 	# Create a cache key based on the location, date and time zone (might want to use a stronger hash function if needed)
 	my $cache_key = "loc:$entry->{id}";
 	if(my $cached = $self->{cache}->get($cache_key)) {
-	::diag(__PACKAGE__);
-	::diag(__LINE__, ": $cache_key");
 		return $cached;
 	}
 
@@ -372,7 +366,7 @@ sub get_next_entry
 	}
 }
 
-# This is the sample program at https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/ChronAm-download_results.html
+# This is the sample code at https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/ChronAm-download_results.html
 #	translated into Perl
 
 # Run P1 search and get a list of results
@@ -400,7 +394,7 @@ sub _get_items
 	# Create URI object and add parameters
 	my $uri = URI->new($url);
 	$uri->query_form(
-		$uri->query_form,
+		$uri->query_form(),
 		fo => 'json',
 		c => 100,
 		at => 'results,pagination'

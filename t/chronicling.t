@@ -5,7 +5,7 @@ use warnings;
 
 use Test::HTTPStatus;
 use Test::Most;
-use Test::RequiresInternet ('chroniclingamerica.loc.gov' => 'https');
+use Test::RequiresInternet ('www.loc.gov' => 'https');
 use Test::URI;
 
 BEGIN {
@@ -17,7 +17,7 @@ CHRONICLING: {
 		my $ca = Genealogy::ChroniclingAmerica->new({
 			'firstname' => 'ralph',
 			'lastname' => 'bixler',
-			'date_of_birth' => 1912,
+			'date_of_birth' => 1919,
 			'state' => 'Indiana',
 		});
 		ok(defined($ca));
