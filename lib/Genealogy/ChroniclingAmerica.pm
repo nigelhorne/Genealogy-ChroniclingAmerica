@@ -311,6 +311,8 @@ sub get_next_entry
 	# Create a cache key based on the location, date and time zone (might want to use a stronger hash function if needed)
 	my $cache_key = "loc:$entry->{id}";
 	if(my $cached = $self->{cache}->get($cache_key)) {
+	::diag(__PACKAGE__);
+	::diag(__LINE__, ": $cache_key");
 		return $cached;
 	}
 
@@ -406,7 +408,7 @@ sub _get_items
 	my $response = $ua->get($uri);
 
 	# Check that the API request was successful
-	if($response->is_success() && $response->header('Content-Type') =~ /json/) {
+	if($response->is_success() && $response->header('Content-Type') && ($response->header('Content-Type') =~ /json/)) {
 		my $data = decode_json($response->decoded_content());
 		my $results = $data->{results};
 

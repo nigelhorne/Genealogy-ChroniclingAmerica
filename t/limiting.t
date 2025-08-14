@@ -30,6 +30,8 @@ BEGIN { use_ok('Genealogy::ChroniclingAmerica') }
 		# version of what the Chronicling America API might return.
 		# my $content = '{"totalItems": "1", "ocr_eng": "A piece of text about Ralph Bixler", "url": "https://example.com", "itemsPerPage": "20", "items": [{"sequence": 12}]}';
 		# return HTTP::Response->new(200, 'OK', [], $content);
+		::diag(__LINE__);
+		sleep(3);
 		return $self->SUPER::get($url);
 	}
 }
