@@ -230,10 +230,10 @@ sub new {
 		cache => $cache,
 	};
 
-	my %query_parameters = ( 'fo' => 'json', 'location_state' => ucfirst(lc($params->{'state'})), 'ops' => 'PHRASE', 'searchType' => 'advanced' );
-	if($query_parameters{'location_state'} eq 'District of columbia') {
-		$query_parameters{'location_state'} = 'District of Columbia';
-	}
+	my %query_parameters = ( 'fo' => 'json', 'location_state' => lc($params->{'state'}), 'ops' => 'PHRASE', 'searchType' => 'advanced' );
+	# if($query_parameters{'location_state'} eq 'District of columbia') {
+		# $query_parameters{'location_state'} = 'District of Columbia';
+	# }
 	my $name = $params->{'firstname'};
 	if($params->{'middlename'}) {
 		$rc->{'name'} = "$name $params->{middlename} $params->{lastname}";
@@ -265,6 +265,8 @@ sub new {
 	my $url = $uri->as_string();
 	# ::diag(">>>>$url = ", $rc->{'name'});
 	# print ">>>>$url = ", $rc->{'name'}, "\n";
+	::diag(__LINE__);
+	::diag($url);
 
 	my $items = _get_items($ua, $url);
 
