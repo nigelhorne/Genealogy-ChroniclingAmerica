@@ -13,6 +13,7 @@ use warnings;
 use strict;
 
 use Carp;
+use CHI;
 use LWP::UserAgent;
 use JSON::MaybeXS;
 use Object::Configure;
@@ -107,6 +108,12 @@ Accepts the following optional arguments:
 
 =over 4
 
+=item * C<cache>
+
+A caching object.
+If not provided,
+an in-memory cache is created with a default expiration of one hour.
+
 =item * C<middlename>
 
 =item * C<date_of_birth>
@@ -177,18 +184,38 @@ sub new {
 		return;
 	}
 
-	my $ua = $params->{'ua'} || LWP::UserAgent->new(
-		ssl_opts => {
-			verify_hostname => 1,
-			# SSL_ca_file => '/etc/ssl/certs/ca-certificates.crt',	# Linux
-			SSL_ca_file => '/opt/homebrew/etc/ca-certificates/cert.pem',	# MacOS
-		},
-		agent => __PACKAGE__ . "/$VERSION"
-	);
+	my $ua = $params->{'ua'};
+	if(!defined($ua)) {
+		my $ssl_opts;
+		if(-r '/etc/ssl/certs/ca-certificates.crt') {	# Linux
+			$ssl_opts = {
+				'SSL_ca_file' => '/etc/ssl/certs/ca-certificates.crt',
+				verify_hostname => 1
+			}
+		} elsif(-r '/opt/homebrew/etc/ca-certificates/cert.pem') {	# MacOS
+			$ssl_opts = {
+				'SSL_ca_file' => '/opt/homebrew/etc/ca-certificates/cert.pem',
+				verify_hostname => 1
+			}
+		} else {
+			$ssl_opts = { verify_hostname => 0 };
+		}
+		$ua = LWP::UserAgent->new(
+			ssl_opts => $ssl_opts,
+			agent => __PACKAGE__ . "/$VERSION"
+		);
+	}
 
 	$ua->env_proxy(1) unless($params->{'ua'});
 
 	$params = Object::Configure::configure($class, $params);
+
+	# Set up caching (default to an in-memory cache if none provided)
+	my $cache = $params->{cache} || CHI->new(
+		driver => 'Memory',
+		global => 1,
+		expires_in => '1 hour',
+	);
 
 	# Set up rate-limiting: minimum interval between requests (in seconds)
 	# From https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/README.html#rate-limits
@@ -201,6 +228,7 @@ sub new {
 		ua => $ua,
 		host => $params->{'host'} || 'www.loc.gov',
 		path => 'collections/chronicling-america',
+		cache => $cache,
 	};
 
 	my %query_parameters = ( 'fo' => 'json', 'state' => ucfirst(lc($params->{'state'})), 'ops' => 'PHRASE', 'searchType' => 'advanced' );
@@ -281,6 +309,12 @@ sub get_next_entry
 
 	# ::diag(Data::Dumper->new([$entry])->Dump());
 
+	# Create a cache key based on the location, date and time zone (might want to use a stronger hash function if needed)
+	my $cache_key = "loc:$entry->{id}";
+	if(my $cached = $self->{cache}->get($cache_key)) {
+		return $cached;
+	}
+
 	# Enforce rate-limiting: ensure at least min_interval seconds between requests.
 	my $now = time();
 	my $elapsed = $now - $self->{last_request};
@@ -326,6 +360,8 @@ sub get_next_entry
 	# ::diag($data->{full_text});
 	foreach my $page(@{$data->{'page'}}) {
 		if($page->{'mimetype'} eq 'application/pdf') {
+			# Cache the result before returning it
+			$self->{'cache'}->set($cache_key, $page->{'url'});
 			return Return::Set::set_return($page->{'url'}, { type => 'string', 'min' => 5, matches => qr/\.pdf$/ });
 		}
 	}
