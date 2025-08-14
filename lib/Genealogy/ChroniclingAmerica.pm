@@ -119,6 +119,8 @@ Accepts the following optional arguments:
 such as L<LWP::UserAgent::Throttled>.
 
 =item * C<min_interval> - Amount to rate limit.
+Defaults to 3 seconds,
+inline with L<https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/README.html#rate-limits>
 
 =back
 
@@ -189,7 +191,9 @@ sub new {
 	$params = Object::Configure::configure($class, $params);
 
 	# Set up rate-limiting: minimum interval between requests (in seconds)
-	my $min_interval = $params->{min_interval} || 0;	# default: no delay
+	# From https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/README.html#rate-limits
+	# Burst Limit: 20 requests per 1 minute, Block for 5 minutes
+	my $min_interval = $params->{min_interval} || 3;	# default: three second delay
 
 	my $rc = {
 		%{$params},
@@ -226,8 +230,8 @@ sub new {
 	$query_parameters{'start_date'} ||= $params->{'date_of_death'};
 	$query_parameters{'end_date'} ||= $params->{'date_of_birth'};
 
-	$query_parameters{'start_date'} .= '-01-01';
-	$query_parameters{'end_date'} .= '-12-31';
+	$query_parameters{'start_date'} .= '-01-01' if($query_parameters{'start_date'});
+	$query_parameters{'end_date'} .= '-12-31' if($query_parameters{'end_date'});
 
 	my $uri = URI->new("https://$rc->{host}/$rc->{path}");
 	$uri->query_form(%query_parameters);
@@ -307,6 +311,17 @@ sub get_next_entry
 	}
 
 	my $data = decode_json($resp->decoded_content());
+
+	my $full_text = $data->{'full_text'};
+	if(!defined($full_text)) {
+		return $self->get_next_entry();
+	}
+
+	$full_text =~ s/[\r\n]/ /g;
+        if($full_text !~ /$self->{'name'}/ims) {
+                return $self->get_next_entry();
+        }
+
 	# ::diag(__LINE__);
 	# ::diag($data->{full_text});
 	foreach my $page(@{$data->{'page'}}) {
