@@ -16,7 +16,7 @@ use Carp;
 use LWP::UserAgent;
 use JSON::MaybeXS;
 use Object::Configure;
-use Params::Get;
+use Params::Get 0.13;
 use Scalar::Util;
 use Return::Set 0.02;
 use URI;
@@ -307,7 +307,7 @@ sub get_next_entry
 	}
 
 	unless($resp->is_success()) {
-		die $resp->status_line();
+		Carp::croak($resp->status_line());
 	}
 
 	my $data = decode_json($resp->decoded_content());
@@ -338,22 +338,23 @@ sub get_next_entry
 sub _get_items
 {
 	my ($ua, $url, $items_ref, $conditional) = @_;
+
 	$items_ref ||= [];
 	$conditional ||= 'True';
-	
+
 	# Check that the query URL is not an item or resource link
 	my @exclude = ("loc.gov/item", "loc.gov/resource");
 	for my $string (@exclude) {
 		if (index($url, $string) != -1) {
-			die 'Your URL points directly to an item or ',
+			Carp::croak('Your URL points directly to an item or ',
 			  'resource page (you can tell because "item" ',
 			  'or "resource" is in the URL). Please use ',
 			  'a search URL instead. For example, instead ',
 			  'of "https://www.loc.gov/item/2009581123/", ',
-			  'try "https://www.loc.gov/maps/?q=2009581123".';
+			  'try "https://www.loc.gov/maps/?q=2009581123".');
 		}
 	}
-	
+
 	# Create URI object and add parameters
 	my $uri = URI->new($url);
 	$uri->query_form(
@@ -362,24 +363,22 @@ sub _get_items
 		c => 100,
 		at => 'results,pagination'
 	);
-	
+
 	# Make HTTP request
 	# ::diag(__LINE__);
 	# ::diag($uri);
 	my $response = $ua->get($uri);
-	
+
 	# Check that the API request was successful
-	if ($response->is_success &&
-		$response->header('Content-Type') =~ /json/) {
-		
-		my $data = decode_json($response->decoded_content);
+	if($response->is_success && $response->header('Content-Type') =~ /json/) {
+		my $data = decode_json($response->decoded_content());
 		my $results = $data->{results};
-		
-		for my $result (@$results) {
+
+		for my $result(@{$results}) {
 			# Filter out anything that's a collection or web page
 			my $original_format = $result->{original_format} || [];
 			my $filter_out = 0;
-			
+
 			# Check if original_format contains "collection" or "web page"
 			for my $format (@$original_format) {
 				if ($format =~ /collection/i || $format =~ /web page/i) {
@@ -387,12 +386,12 @@ sub _get_items
 					last;
 				}
 			}
-			
+
 			# Evaluate conditional (simplified - assumes 'True' means true)
 			if ($conditional ne 'True') {
 				$filter_out = 1;
 			}
-			
+
 			unless ($filter_out) {
 				# Get the link to the item record
 				if (my $item = $result->{id}) {
@@ -408,13 +407,13 @@ sub _get_items
 				}
 			}
 		}
-		
+
 		# Repeat the loop on the next page, unless we're on the last page
 		if (defined $data->{pagination}->{next}) {
 			my $next_url = $data->{pagination}->{next};
 			_get_items($ua, $next_url, $items_ref, $conditional);
 		}
-		
+
 		return $items_ref;
 	}
 	Carp::carp($url, ': ', $response->status_line());

@@ -66,7 +66,7 @@ sub get_item_ids {
 	my ($url, $items_ref, $conditional) = @_;
 	$items_ref ||= [];
 	$conditional ||= 'True';
-	
+
 	# Check that the query URL is not an item or resource link
 	my @exclude = ("loc.gov/item", "loc.gov/resource");
 	for my $string (@exclude) {
@@ -79,7 +79,7 @@ sub get_item_ids {
 			  'try "https://www.loc.gov/maps/?q=2009581123".';
 		}
 	}
-	
+
 	# Create URI object and add parameters
 	my $uri = URI->new($url);
 	$uri->query_form(
@@ -88,23 +88,22 @@ sub get_item_ids {
 		c => 100,
 		at => 'results,pagination'
 	);
-	
+
 	# print 'Trying ', $uri->as_string(), "\n";
 	# Make HTTP request
 	my $response = $ua->get($uri);
-	
+
 	# Check that the API request was successful
-	if ($response->is_success && 
-		$response->header('Content-Type') =~ /json/) {
-		
+	if ($response->is_success && $response->header('Content-Type') =~ /json/) {
+
 		my $data = decode_json($response->decoded_content);
 		my $results = $data->{results};
-		
+
 		for my $result (@$results) {
 			# Filter out anything that's a collection or web page
 			my $original_format = $result->{original_format} || [];
 			my $filter_out = 0;
-			
+
 			# Check if original_format contains "collection" or "web page"
 			for my $format (@$original_format) {
 				if ($format =~ /collection/i || $format =~ /web page/i) {
@@ -112,12 +111,12 @@ sub get_item_ids {
 					last;
 				}
 			}
-			
+
 			# Evaluate conditional (simplified - assumes 'True' means true)
 			if ($conditional ne 'True') {
 				$filter_out = 1;
 			}
-			
+
 			unless ($filter_out) {
 				# Get the link to the item record
 				if (my $item = $result->{id}) {
@@ -132,13 +131,13 @@ sub get_item_ids {
 				}
 			}
 		}
-		
+
 		# Repeat the loop on the next page, unless we're on the last page
 		if (defined $data->{pagination}->{next}) {
 			my $next_url = $data->{pagination}->{next};
 			get_item_ids($next_url, $items_ref, $conditional);
 		}
-		
+
 		return $items_ref;
 	} else {
 		print "There was a problem. Try running the script again, or check your searchURL.\n",
