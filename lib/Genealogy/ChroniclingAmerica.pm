@@ -55,7 +55,7 @@ our $VERSION = '0.06';
 
 =head1 DESCRIPTION
 
-The **Genealogy::ChroniclingAmerica** module allows users to search for historical newspaper records from the **Chronicling America** archive,
+The B<Genealogy::ChroniclingAmerica> module allows users to search for historical newspaper records from the B<Chronicling America> archive,
 maintained by the Library of Congress.
 By providing a person's first name,
 last name,
@@ -63,7 +63,8 @@ and state,
 the module constructs and executes search queries,
 retrieving URLs to relevant newspaper pages in JSON format.
 It supports additional filters like date of birth and date of death,
-enforces **rate-limiting** to comply with API request limits,
+enforces B<rate-limiting> to comply with API request limits,
+local caching,
 and includes robust error handling and validation.
 Ideal for genealogy research,
 this module streamlines access to historical newspaper archives with an easy-to-use interface.
