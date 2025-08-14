@@ -75,6 +75,8 @@ Accepts the following optional arguments:
 - `ua` - An object that understands get and env\_proxy messages,
 such as [LWP::UserAgent::Throttled](https://metacpan.org/pod/LWP%3A%3AUserAgent%3A%3AThrottled).
 - `min_interval` - Amount to rate limit.
+Defaults to 3 seconds,
+inline with [https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling\_America/README.html#rate-limits](https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/README.html#rate-limits)
 
 ## get\_next\_entry
 
