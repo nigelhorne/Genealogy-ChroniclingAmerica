@@ -231,8 +231,8 @@ sub new {
 	};
 
 	my %query_parameters = ( 'fo' => 'json', 'location_state' => ucfirst(lc($params->{'state'})), 'ops' => 'PHRASE', 'searchType' => 'advanced' );
-	if($query_parameters{'state'} eq 'District of columbia') {
-		$query_parameters{'state'} = 'District of Columbia';
+	if($query_parameters{'location_state'} eq 'District of columbia') {
+		$query_parameters{'location_state'} = 'District of Columbia';
 	}
 	my $name = $params->{'firstname'};
 	if($params->{'middlename'}) {
