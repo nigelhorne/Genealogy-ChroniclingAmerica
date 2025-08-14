@@ -204,9 +204,8 @@ sub new {
 			ssl_opts => $ssl_opts,
 			agent => __PACKAGE__ . "/$VERSION"
 		);
+		$ua->env_proxy(1);
 	}
-
-	$ua->env_proxy(1) unless($params->{'ua'});
 
 	$params = Object::Configure::configure($class, $params);
 
