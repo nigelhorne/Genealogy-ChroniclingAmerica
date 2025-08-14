@@ -326,6 +326,8 @@ Nigel Horne, C<< <njh at nigelhorne.com> >>
 
 =head1 BUGS
 
+Needs to be migrated to the new API.
+
 If a middle name is given and no match is found,
 it should search again without the middle name.
 

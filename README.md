@@ -4,7 +4,7 @@ Genealogy::ChroniclingAmerica - Find URLs for a given person on the Library of C
 
 # VERSION
 
-Version 0.05
+Version 0.06
 
 # SYNOPSIS
 
@@ -27,7 +27,7 @@ Version 0.05
 
 # DESCRIPTION
 
-The \*\*Genealogy::ChroniclingAmerica\*\* Perl module allows users to search for historical newspaper records from the \*\*Chronicling America\*\* archive,
+The \*\*Genealogy::ChroniclingAmerica\*\* module allows users to search for historical newspaper records from the \*\*Chronicling America\*\* archive,
 maintained by the Library of Congress.
 By providing a person's first name,
 last name,
@@ -82,9 +82,11 @@ Returns the next match as a URL.
 
 # AUTHOR
 
-Nigel Horne, `<njh at bandsman.co.uk>`
+Nigel Horne, `<njh at nigelhorne.com>`
 
 # BUGS
+
+Needs to be migrated to the new API.
 
 If a middle name is given and no match is found,
 it should search again without the middle name.
@@ -93,6 +95,7 @@ it should search again without the middle name.
 
 [https://github.com/nigelhorne/gedcom](https://github.com/nigelhorne/gedcom)
 [https://chroniclingamerica.loc.gov](https://chroniclingamerica.loc.gov)
+[https://github.com/LibraryOfCongress/data-exploration](https://github.com/LibraryOfCongress/data-exploration)
 
 # SUPPORT
 
