@@ -31,7 +31,6 @@ BEGIN { use_ok('Genealogy::ChroniclingAmerica') }
 		# my $content = '{"totalItems": "1", "ocr_eng": "A piece of text about Ralph Bixler", "url": "https://example.com", "itemsPerPage": "20", "items": [{"sequence": 12}]}';
 		# return HTTP::Response->new(200, 'OK', [], $content);
 		::diag(__LINE__);
-		sleep(3);
 		return $self->SUPER::get($url);
 	}
 }
@@ -47,7 +46,8 @@ my $ua = MyTestUA->new(agent => 'Testing git://github.com/nigelhorne/Genealogy-C
 my $ca = Genealogy::ChroniclingAmerica->new(
 	'firstname' => 'ralph',
 	'lastname' => 'bixler',
-	'date_of_birth' => 1912,
+	'date_of_birth' => 1919,
+	'date_of_death' => 1919,
 	'state' => 'Indiana',
 	min_interval => $min_interval,
 	ua => $ua,
