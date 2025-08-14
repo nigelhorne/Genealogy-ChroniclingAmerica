@@ -301,6 +301,8 @@ sub get_next_entry
 	my $self = shift;
 
 	# Exit if no matches or index out of bounds
+	::diag(__LINE__);
+	::diag($self->{'index'}, '>=', $self->{'matches'});
 	return if($self->{'matches'} == 0) || ($self->{'index'} >= $self->{'matches'});
 
 	# Retrieve the next entry and increment index
