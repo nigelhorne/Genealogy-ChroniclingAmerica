@@ -230,7 +230,7 @@ sub new {
 		cache => $cache,
 	};
 
-	my %query_parameters = ( 'fo' => 'json', 'state' => ucfirst(lc($params->{'state'})), 'ops' => 'PHRASE', 'searchType' => 'advanced' );
+	my %query_parameters = ( 'fo' => 'json', 'location_state' => ucfirst(lc($params->{'state'})), 'ops' => 'PHRASE', 'searchType' => 'advanced' );
 	if($query_parameters{'state'} eq 'District of columbia') {
 		$query_parameters{'state'} = 'District of Columbia';
 	}
