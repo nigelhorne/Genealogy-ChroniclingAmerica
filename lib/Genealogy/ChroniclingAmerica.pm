@@ -6,7 +6,6 @@ package Genealogy::ChroniclingAmerica;
 # TODO: NEW API
 # https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/README.html
 # https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/ChronAm-download_results.html
-
 # https://www.loc.gov/collections/chronicling-america/?dl=page&end_date=1912-12-31&ops=PHRASE&qs=ralph+bixler&searchType=advanced&start_date=1912-01-01&fo=json
 
 use warnings;
@@ -463,16 +462,16 @@ Nigel Horne, C<< <njh at nigelhorne.com> >>
 
 =head1 BUGS
 
-Needs to be migrated to the new API.
-
 If a middle name is given and no match is found,
 it should search again without the middle name.
 
 =head1 SEE ALSO
 
-L<https://github.com/nigelhorne/gedcom>
-L<https://chroniclingamerica.loc.gov>
-L<https://github.com/LibraryOfCongress/data-exploration>
+=item * L<https://github.com/nigelhorne/gedcom>
+
+=item * L<https://chroniclingamerica.loc.gov>
+
+=item * L<https://github.com/LibraryOfCongress/data-exploration>
 
 =head1 SUPPORT
 

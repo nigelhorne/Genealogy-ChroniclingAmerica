@@ -95,16 +95,14 @@ Nigel Horne, `<njh at nigelhorne.com>`
 
 # BUGS
 
-Needs to be migrated to the new API.
-
 If a middle name is given and no match is found,
 it should search again without the middle name.
 
 # SEE ALSO
 
-[https://github.com/nigelhorne/gedcom](https://github.com/nigelhorne/gedcom)
-[https://chroniclingamerica.loc.gov](https://chroniclingamerica.loc.gov)
-[https://github.com/LibraryOfCongress/data-exploration](https://github.com/LibraryOfCongress/data-exploration)
+- [https://github.com/nigelhorne/gedcom](https://github.com/nigelhorne/gedcom)
+- [https://chroniclingamerica.loc.gov](https://chroniclingamerica.loc.gov)
+- [https://github.com/LibraryOfCongress/data-exploration](https://github.com/LibraryOfCongress/data-exploration)
 
 # SUPPORT
 
@@ -135,3 +133,15 @@ You can also look for information at:
 Copyright 2018-2025 Nigel Horne.
 
 This program is released under the following licence: GPL2
+
+# POD ERRORS
+
+Hey! **The above document had some coding errors, which are explained below:**
+
+- Around line 470:
+
+    '=item' outside of any '=over'
+
+- Around line 476:
+
+    You forgot a '=back' before '=head1'
