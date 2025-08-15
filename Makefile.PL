@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Getopt::Long;	# Technique inspired by IO::Lambda
-use ExtUtils::MakeMaker 6.64;	# 6.64 for TEST_REQUIRES
+use ExtUtils::MakeMaker;
 use IO::Socket::INET;
 
 # Test for broken smokers that don't set AUTOMATED_TESTING
@@ -64,7 +64,9 @@ WriteMakefile(
       ? ('LICENSE'=> 'GPL')
       : ()),
     PL_FILES	=> {},
-    TEST_REQUIRES => {
+	CONFIGURE_REQUIRES => {
+		'ExtUtils::MakeMaker' => 6.64,	# Minimum version for TEST_REQUIRES
+    }, TEST_REQUIRES => {
 	'Test::DescribeMe' => 0,
 	'Test::HTTPStatus' => 0,
 	'Test::MockObject' => 0,
@@ -78,6 +80,7 @@ WriteMakefile(
 	'Carp' => 0,
 	'CHI' => 0,
 	'JSON::MaybeXS' => 0,
+	'ExtUtils::MakeMaker' => 6.64,	# Minimum version for TEST_REQUIRES
 	'LWP::Protocol::https' => 0,
 	'LWP::UserAgent' => 0,
 	'Object::Configure' => 0,

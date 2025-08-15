@@ -4,7 +4,7 @@ Genealogy::ChroniclingAmerica - Find URLs for a given person on the Library of C
 
 # VERSION
 
-Version 0.06
+Version 0.07
 
 # SYNOPSIS
 
