@@ -379,7 +379,7 @@ sub _get_items
 	$depth ||= 0;
 
 	# Check that the query URL is not an item or resource link
-	my @exclude = ("loc.gov/item", "loc.gov/resource");
+	my @exclude = ('loc.gov/item', 'loc.gov/resource');
 	for my $string (@exclude) {
 		if (index($url, $string) != -1) {
 			Carp::croak('Your URL points directly to an item or ',

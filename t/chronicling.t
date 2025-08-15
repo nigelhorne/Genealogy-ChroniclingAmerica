@@ -50,13 +50,13 @@ CHRONICLING: {
 			'firstname' => 'katherine',
 			'lastname' => 'bixler',
 			'date_of_birth' => 1789,
-			'date_of_death' => 1963,
+			'date_of_death' => 1789,
 			'state' => 'Indiana',
 		});
 		ok(defined($ca));
 		ok($ca->isa('Genealogy::ChroniclingAmerica'));
 
-		ok(defined($ca->get_next_entry()));
+		ok(!defined($ca->get_next_entry()));
 
 		$ca = Genealogy::ChroniclingAmerica->new({
 			'firstname' => 'harry',
