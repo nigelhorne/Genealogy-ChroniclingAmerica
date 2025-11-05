@@ -184,6 +184,8 @@ sub new {
 		return;
 	}
 
+	$params = Object::Configure::configure($class, $params);
+
 	my $ua = $params->{'ua'};
 	if(!defined($ua)) {
 		my $ssl_opts;
@@ -206,8 +208,6 @@ sub new {
 		);
 		$ua->env_proxy(1);
 	}
-
-	$params = Object::Configure::configure($class, $params);
 
 	# Set up caching (default to an in-memory cache if none provided)
 	my $cache = $params->{cache} || CHI->new(
