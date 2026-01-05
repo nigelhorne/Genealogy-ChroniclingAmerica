@@ -130,18 +130,6 @@ You can also look for information at:
 
 # LICENSE AND COPYRIGHT
 
-Copyright 2018-2025 Nigel Horne.
+Copyright 2018-2026 Nigel Horne.
 
 This program is released under the following licence: GPL2
-
-# POD ERRORS
-
-Hey! **The above document had some coding errors, which are explained below:**
-
-- Around line 470:
-
-    '=item' outside of any '=over'
-
-- Around line 476:
-
-    You forgot a '=back' before '=head1'

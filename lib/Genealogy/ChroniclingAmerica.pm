@@ -467,11 +467,15 @@ it should search again without the middle name.
 
 =head1 SEE ALSO
 
+=over 4
+
 =item * L<https://github.com/nigelhorne/gedcom>
 
 =item * L<https://chroniclingamerica.loc.gov>
 
 =item * L<https://github.com/LibraryOfCongress/data-exploration>
+
+=back
 
 =head1 SUPPORT
 
@@ -503,7 +507,7 @@ L<https://metacpan.org/release/Genealogy-ChroniclingAmerica>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2018-2025 Nigel Horne.
+Copyright 2018-2026 Nigel Horne.
 
 This program is released under the following licence: GPL2
 
