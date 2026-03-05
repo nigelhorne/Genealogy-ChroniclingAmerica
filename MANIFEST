@@ -1,5 +1,6 @@
 bin/new_api
 Changes
+cpanfile
 ignore.txt
 lib/Genealogy/ChroniclingAmerica.pm
 LICENCE
