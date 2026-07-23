@@ -343,7 +343,14 @@ sub get_next_entry
 		Carp::croak($resp->status_line());
 	}
 
-	my $data = decode_json($resp->decoded_content());
+	my $data;
+	eval {
+		$data = decode_json($resp->decoded_content())
+	};
+	if($@) {
+		Carp::carp("$@: ", $resp->decoded_content());
+		return;
+	}
 
 	my $full_text = $data->{'full_text'};
 	if(!defined($full_text)) {
