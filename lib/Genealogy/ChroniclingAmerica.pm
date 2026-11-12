@@ -18,6 +18,7 @@ use JSON::MaybeXS;
 use Object::Configure;
 use Params::Get 0.13;
 use Scalar::Util;
+use Time::HiRes;
 use Return::Set 0.02;
 use URI;
 
@@ -268,6 +269,12 @@ sub new {
 
 	my $items = _get_items($ua, $url);
 
+	# loc.gov sometimes answers an identical search with no results, so try once more
+	unless(scalar(@{$items})) {
+		Time::HiRes::sleep($min_interval);
+		$items = _get_items($ua, $url);
+	}
+
 	# Update last_request timestamp
 	$rc->{'last_request'} = time();
 
@@ -354,16 +361,24 @@ sub get_next_entry
 
 	my $full_text = $data->{'full_text'};
 	if(!defined($full_text)) {
+		# loc.gov now serves the text from a separate service
+		$full_text = $self->_fetch_full_text($data);
+	}
+	if(!defined($full_text)) {
 		return $self->get_next_entry();
 	}
 
 	$full_text =~ s/[\r\n]/ /g;
-        if($full_text !~ /$self->{'name'}/ims) {
-                return $self->get_next_entry();
-        }
+	if($full_text !~ /\Q$self->{'name'}\E/ims) {
+		return $self->get_next_entry();
+	}
 
-	# ::diag(__LINE__);
-	# ::diag($data->{full_text});
+	# The PDF is now given in the 'resource' section
+	if(ref($data->{'resource'}) eq 'HASH' && (my $pdf = $data->{'resource'}->{'pdf'})) {
+		$self->{'cache'}->set($cache_key, $pdf);
+		return Return::Set::set_return($pdf, { type => 'string', 'min' => 5, matches => qr/\.pdf$/ });
+	}
+
 	foreach my $page(@{$data->{'page'}}) {
 		if($page->{'mimetype'} eq 'application/pdf') {
 			# Cache the result before returning it
@@ -377,6 +392,33 @@ sub get_next_entry
 #	translated into Perl
 
 # Run P1 search and get a list of results
+# Fetch the OCR text of a page from the 'fulltext_file' service, returns undef on any failure
+sub _fetch_full_text
+{
+	my ($self, $data) = @_;
+
+	my $url = (ref($data->{'resource'}) eq 'HASH' && $data->{'resource'}->{'fulltext_file'}) || $data->{'fulltext_service'};
+	return unless($url);
+
+	my $now = time();
+	my $elapsed = $now - $self->{'last_request'};
+	if($elapsed < $self->{'min_interval'}) {
+		Time::HiRes::sleep($self->{'min_interval'} - $elapsed);
+	}
+	my $resp = $self->{'ua'}->get($url);
+	$self->{'last_request'} = time();
+
+	return unless($resp->is_success());
+
+	my $json;
+	eval { $json = decode_json($resp->decoded_content()) };
+	return if($@ || ref($json) ne 'HASH');
+
+	# Keyed by segment name
+	return join(' ', map { ref($_) eq 'HASH' ? ($_->{'full_text'} // ()) : () } values %{$json});
+}
+
+
 sub _get_items
 {
 	my ($ua, $url, $items_ref, $conditional, $depth) = @_;

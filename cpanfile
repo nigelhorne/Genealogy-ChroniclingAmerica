@@ -20,7 +20,6 @@ on 'configure' => sub {
 
 on 'test' => sub {
 	requires 'Test::DescribeMe';
-	requires 'Test::HTTPStatus';
 	requires 'Test::Mockingbird';
 	requires 'Test::Most';
 	requires 'Test::Needs';
