@@ -5,7 +5,7 @@ use warnings;
 
 use LWP::UserAgent;
 use JSON::MaybeXS;
-use Test::MockObject;
+use Test::Mockingbird;
 use Test::Most;
 use Test::RequiresInternet ('www.loc.gov' => 'https');
 

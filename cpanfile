@@ -4,7 +4,7 @@ requires 'perl', '5.6.2';
 
 requires 'CHI';
 requires 'Carp';
-requires 'ExtUtils::MakeMaker', '6.64';
+requires 'ExtUtils::MakeMaker', '6.64';   # Minimum version for TEST_REQUIRES
 requires 'JSON::MaybeXS';
 requires 'LWP::Protocol::https';
 requires 'LWP::UserAgent';
@@ -15,19 +15,20 @@ requires 'Scalar::Util';
 requires 'URI';
 
 on 'configure' => sub {
-	requires 'ExtUtils::MakeMaker', '6.64';
+	requires 'ExtUtils::MakeMaker', '6.64';   # Minimum version for TEST_REQUIRES
 };
+
 on 'test' => sub {
 	requires 'Test::DescribeMe';
 	requires 'Test::HTTPStatus';
-	requires 'Test::Kwalitee';
-	requires 'Test::MockObject';
+	requires 'Test::Mockingbird';
 	requires 'Test::Most';
 	requires 'Test::Needs';
 	requires 'Test::NoWarnings';
 	requires 'Test::RequiresInternet';
 	requires 'Test::URI';
 };
+
 on 'develop' => sub {
 	requires 'Devel::Cover';
 	requires 'Perl::Critic';
