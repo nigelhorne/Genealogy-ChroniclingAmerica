@@ -1,31 +1,33 @@
-# NAME
+## Name
 
 Genealogy::ChroniclingAmerica - Find URLs for a given person on the Library of Congress Newspaper Records
 
-# VERSION
+## Version
 
 Version 0.07
 
-# SYNOPSIS
+## Synopsis
 
-    use HTTP::Cache::Transparent;  # be nice
-    use Genealogy::ChroniclingAmerica;
+```perl
+use HTTP::Cache::Transparent;  # be nice
+use Genealogy::ChroniclingAmerica;
 
-    HTTP::Cache::Transparent::init({
-        BasePath => '/tmp/cache'
-    });
-    my $loc = Genealogy::ChroniclingAmerica->new({
-        firstname => 'John',
-        lastname => 'Smith',
-        state => 'Indiana',
-        date_of_death => 1862
-    });
+HTTP::Cache::Transparent::init({
+    BasePath => '/tmp/cache'
+});
+my $loc = Genealogy::ChroniclingAmerica->new({
+    firstname => 'John',
+    lastname => 'Smith',
+    state => 'Indiana',
+    date_of_death => 1862
+});
 
-    while(my $url = $loc->get_next_entry()) {
-        print "$url\n";
-    }
+while(my $url = $loc->get_next_entry()) {
+    print "$url\n";
+}
+```
 
-# DESCRIPTION
+## Description
 
 The **Genealogy::ChroniclingAmerica** module allows users to search for historical newspaper records from the **Chronicling America** archive,
 maintained by the Library of Congress.
@@ -54,9 +56,9 @@ this module streamlines access to historical newspaper archives with an easy-to-
     if necessary,
     sleeps for the remaining time.
 
-# SUBROUTINES/METHODS
+## Subroutines/Methods
 
-## new
+### New
 
 Creates a Genealogy::ChroniclingAmerica object.
 
@@ -85,26 +87,26 @@ such as [LWP::UserAgent::Throttled](https://metacpan.org/pod/LWP%3A%3AUserAgent%
 Defaults to 3 seconds,
 inline with [https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling\_America/README.html#rate-limits](https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/README.html#rate-limits)
 
-## get\_next\_entry
+### Get\_Next\_Entry
 
 Returns the next match as a URL.
 
-# AUTHOR
+## Author
 
 Nigel Horne, `<njh at nigelhorne.com>`
 
-# BUGS
+## Bugs
 
 If a middle name is given and no match is found,
 it should search again without the middle name.
 
-# SEE ALSO
+## See Also
 
 - [https://github.com/nigelhorne/gedcom](https://github.com/nigelhorne/gedcom)
 - [https://chroniclingamerica.loc.gov](https://chroniclingamerica.loc.gov)
 - [https://github.com/LibraryOfCongress/data-exploration](https://github.com/LibraryOfCongress/data-exploration)
 
-# SUPPORT
+## Support
 
 This module is provided as-is without any warranty.
 
@@ -116,7 +118,9 @@ automatically be notified of progress on your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc Genealogy::ChroniclingAmerica
+```
+perldoc Genealogy::ChroniclingAmerica
+```
 
 You can also look for information at:
 
@@ -128,7 +132,7 @@ You can also look for information at:
 
     [https://metacpan.org/release/Genealogy-ChroniclingAmerica](https://metacpan.org/release/Genealogy-ChroniclingAmerica)
 
-# LICENSE AND COPYRIGHT
+## License and Copyright
 
 Copyright 2018-2026 Nigel Horne.
 
