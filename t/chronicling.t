@@ -48,7 +48,11 @@ CHRONICLING: {
 			$count++;
 		}
 		ok(!defined($ca->get_next_entry()));
-		cmp_ok($count, '>', 0, 'At least one match found');
+		SKIP: {
+			# loc.gov sometimes answers this search with no results, even after a retry
+			skip('loc.gov returned no results for ralph bixler', 1) if(($count == 0) && ($ca->{'matches'} == 0));
+			cmp_ok($count, '>', 0, 'At least one match found');
+		}
 
 		$ca = Genealogy::ChroniclingAmerica->new(
 			'firstname' => 'mahalan',
