@@ -14,6 +14,8 @@ Revision history for Genealogy-ChroniclingAmerica
 	- Skip, rather than fail, PDF link checks when tile.loc.gov refuses
 		the request (403) or is unavailable (5xx)
 	- Don't fail the rate-limiting test when no results are returned
+	- Skip, rather than fail, the match-count checks in t/chronicling.t when
+		the L.O.C. returns no results
 	- Dropped the Test::HTTPStatus dependency
 	- Added t/mocked.t, tests of the new API layout which don't need the network
 	[ Documentation ]
