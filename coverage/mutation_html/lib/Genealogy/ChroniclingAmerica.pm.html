@@ -1,0 +1,1255 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>File: lib/Genealogy/ChroniclingAmerica.pm</title>
+<style>
+
+/* --------------------------------------------------
+   CSS Variables (Light Mode Default)
+-------------------------------------------------- */
+
+:root {
+    --bg: #ffffff;
+    --text: #000000;
+    --table-header: #333;
+    --table-header-text: #ffffff;
+
+    --survived-1: #f8d7da;
+    --survived-2: #f5b7b1;
+    --survived-3: #ec7063;
+
+    --killed: #d4edda;
+    --border: #cccccc;
+}
+
+/* --------------------------------------------------
+   Dark Mode Overrides
+-------------------------------------------------- */
+
+html[data-theme='dark'] {
+    --bg: #1e1e1e;
+    --text: #dddddd;
+    --table-header: #222;
+    --table-header-text: #ffffff;
+
+    --survived-1: #5c2b2e;
+    --survived-2: #7b2c2f;
+    --survived-3: #a93226;
+
+    --killed: #1e4620;
+    --border: #555;
+}
+
+/* --------------------------------------------------
+   Global Styles
+-------------------------------------------------- */
+
+body {
+	font-family: sans-serif;
+	background: var(--bg);
+	color: var(--text);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    background: var(--table-header);
+    color: var(--table-header-text);
+}
+
+.survived-1 { background-color: var(--survived-1); }
+.survived-2 { background-color: var(--survived-2); }
+.survived-3 { background-color: var(--survived-3); }
+
+.killed { background-color: var(--killed); }
+
+.legend {
+    border: 1px solid #ccc;
+    background: #fafafa;
+    padding: 10px;
+    margin: 15px 0;
+    font-size: 0.9em;
+}
+
+.legend pre {
+    background: #f4f4f4;
+    padding: 5px;
+}
+
+.legend-box {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin: 0 6px 0 20px;
+    vertical-align: middle;
+    border: 1px solid var(--border);
+}
+
+/* White box for non-mutated lines */
+.legend-box.none {
+	background-color: var(--bg);
+}
+
+/* --------------------------------------------------
+   Suggested Test Box Styling
+   Theme-aware and readable in light & dark modes
+-------------------------------------------------- */
+
+.suggested-test {
+    margin-top: 6px;
+    margin-bottom: 12px;
+
+    /* Use theme variables instead of hardcoded colors */
+    background: var(--bg);
+    color: var(--text);
+
+    padding: 8px;
+    border-radius: 4px;
+
+    /* Subtle border for visual separation */
+    border: 1px solid var(--border);
+}
+
+/* Label styling */
+.suggest-label {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+/* Ensure the test code block inherits readable colors */
+.suggested-test pre {
+    background: transparent;   /* Prevent nested dark blocks */
+    color: inherit;            /* Match theme text color */
+    margin: 0;
+    font-family: monospace;
+}
+
+pre { line-height: 1.4; }
+
+pre > details {
+    margin: 0.2em 0;
+}
+
+pre > details:first-child {
+    margin-top: 0;
+}
+
+pre > details:last-child {
+    margin-bottom: 0;
+}
+
+pre details,
+pre summary,
+pre ul,
+pre li {
+    white-space: normal;
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+}
+
+.nav { margin-bottom: 1em; }
+
+.toggle {
+    float: right;
+    cursor: pointer;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+/* Tooltip container */
+.tooltip {
+	position: relative;
+	cursor: help;
+}
+
+/* Tooltip bubble */
+.tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: var(--table-header);
+    color: var(--table-header-text);
+    padding: 6px 10px;
+    white-space: normal;
+    max-width: 300px;
+    min-width: 30ch;
+    font-size: 12px;
+    border-radius: 6px;
+    z-index: 1000;
+    margin-left: 10ch;   /* move tooltip ~10 characters to the right */
+}
+
+.mutant-details {
+	margin-left: 2em;
+	font-size: 0.9em;
+}
+
+/* Indent the list of mutations that displays when expanding by 8 characters */
+pre details.mutant-details ul {
+	padding-left: 8ch;
+	margin: 0.2em 0;
+}
+
+.mutant-details summary {
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.lcsaj-dot {
+    color: #5555ff;
+    font-size: 10px;
+    margin-right: 3px;
+}
+
+.lcsaj-dot-uncovered {
+    color: #cc4444;
+    font-size: 10px;
+    margin-right: 3px;
+}
+
+.lcsaj-tip {
+	position: relative;
+	display: inline-block;
+}
+
+.lcsaj-tip .lcsaj-tip-text {
+	visibility: hidden;
+	background-color: #333;
+	color: #fff;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 11px;
+	white-space: nowrap;
+	position: fixed;
+	z-index: 9999;
+	pointer-events: none;
+}
+
+.lcsaj-tip:hover .lcsaj-tip-text {
+	visibility: visible;
+}
+
+.cpd-dot {
+    color: #cc8800;
+    font-size: 10px;
+    margin-right: 3px;
+    cursor: help;
+    text-decoration: none;
+}
+a.cpd-dot { cursor: pointer; }
+a.cpd-dot:hover { color: #ff8800; }
+
+.cpd-tip {
+    position: relative;
+    display: inline-block;
+}
+
+.cpd-tip .cpd-tip-text {
+    visibility: hidden;
+    background-color: #333;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.cpd-tip:hover .cpd-tip-text {
+    visibility: visible;
+}
+
+/* CPD drill-down page styles */
+.dup-line { background-color: #fff3cd; display: block; }
+.dup-line:hover { background-color: #ffe082; }
+.intra-dot { color: #9944cc; margin-right: 4px; cursor: help; text-decoration: none; }
+a.intra-dot { cursor: pointer; }
+a.intra-dot:hover { color: #7700bb; }
+.cpd-legend {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 4px;
+    display: inline-block;
+    padding: 6px 10px;
+    margin-bottom: 1em;
+    font-size: 0.9em;
+}
+
+</style>
+</head>
+<body>
+<button class="toggle" onclick="toggleTheme()">🌙 Toggle Theme</button>
+<h1>lib/Genealogy/ChroniclingAmerica.pm</h1>
+<div class="nav"><a href="../../../index.html">Index</a>
+</div><div class='summary'>
+<strong>Structural Coverage (Approximate)</strong><p>
+TER1 (Statement): 76.56%<br>
+TER2 (Branch): 48.94%<br>
+TER3 (LCSAJ): 96.4% (27/28)<br>
+Approximate LCSAJ segments: 95<br>
+</div>
+
+    <div class="legend">
+        <h3>LCSAJ Legend</h3>
+
+        <p>
+        <span class="lcsaj-dot">●</span>
+        <b>Covered</b> — this LCSAJ path was executed during testing.
+        </p>
+
+        <p>
+        <span class="lcsaj-dot-uncovered">●</span>
+        <b>Not covered</b> — this LCSAJ path was never executed. These are the paths to focus on.
+        </p>
+
+        <p>
+        Multiple dots on a line indicate that multiple control-flow paths begin at that line.
+        Hovering over any dot shows:
+        </p>
+
+        <pre>
+        start → end → jump
+        </pre>
+
+        <ul>
+        <li><b>start</b> – first line of the linear sequence</li>
+        <li><b>end</b> – last line before control flow changes</li>
+        <li><b>jump</b> – line execution jumps to next</li>
+        </ul>
+
+        <p>
+        Uncovered paths show <b>[NOT COVERED]</b> in the tooltip.
+	</p>
+    </div>
+
+		<div class="legend">
+			<h3>Mutant Testing Legend</h3>
+			<span class="legend-box survived-1"></span> Survived (tests missed this)
+			<span class="legend-box killed"></span> Killed (tests detected this)
+			<span class="legend-box none"></span> No mutation
+		</div>
+	<pre>
+<span class="">    1: package Genealogy::ChroniclingAmerica;
+</span><span class="">    2: 
+</span><span class="">    3: # OLD API
+</span><span class="">    4: # https://chroniclingamerica.loc.gov/search/pages/results/?date1=1912&amp;state=Indiana&amp;format=json&amp;andtext=ralph%3Dbixler
+</span><span class="">    5: 
+</span><span class="">    6: # TODO: NEW API
+</span><span class="">    7: # https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/README.html
+</span><span class="">    8: # https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/ChronAm-download_results.html
+</span><span class="">    9: # https://www.loc.gov/collections/chronicling-america/?dl=page&amp;end_date=1912-12-31&amp;ops=PHRASE&amp;qs=ralph+bixler&amp;searchType=advanced&amp;start_date=1912-01-01&amp;fo=json
+</span><span class="">   10: 
+</span><span class="">   11: use warnings;
+</span><span class="">   12: use strict;
+</span><span class="">   13: 
+</span><span class="">   14: use Carp;
+</span><span class="">   15: use CHI;
+</span><span class="">   16: use LWP::UserAgent;
+</span><span class="">   17: use JSON::MaybeXS;
+</span><span class="">   18: use Object::Configure;
+</span><span class="">   19: use Params::Get 0.13;
+</span><span class="">   20: use Scalar::Util;
+</span><span class="">   21: use Time::HiRes qw(time);
+</span><span class="">   22: use Return::Set 0.02;
+</span><span class="">   23: use URI;
+</span><span class="">   24: 
+</span><span class="">   25: =head1 NAME
+</span><span class="">   26: 
+</span><span class="">   27: Genealogy::ChroniclingAmerica - Find URLs for a given person on the Library of Congress Newspaper Records
+</span><span class="">   28: 
+</span><span class="">   29: =head1 VERSION
+</span><span class="">   30: 
+</span><span class="">   31: Version 0.08
+</span><span class="">   32: 
+</span><span class="">   33: =cut
+</span><span class="">   34: 
+</span><span class="">   35: our $VERSION = &#39;0.08&#39;;
+</span><span class="">   36: 
+</span><span class="">   37: =head1 SYNOPSIS
+</span><span class="">   38: 
+</span><span class="">   39:     use HTTP::Cache::Transparent;  # be nice
+</span><span class="">   40:     use Genealogy::ChroniclingAmerica;
+</span><span class="">   41: 
+</span><span class="">   42:     HTTP::Cache::Transparent::init({
+</span><span class="">   43: 	BasePath =&gt; &#39;/tmp/cache&#39;
+</span><span class="">   44:     });
+</span><span class="">   45:     my $loc = Genealogy::ChroniclingAmerica-&gt;new({
+</span><span class="">   46: 	firstname =&gt; &#39;John&#39;,
+</span><span class="">   47: 	lastname =&gt; &#39;Smith&#39;,
+</span><span class="">   48: 	state =&gt; &#39;Indiana&#39;,
+</span><span class="">   49: 	date_of_death =&gt; 1862
+</span><span class="">   50:     });
+</span><span class="">   51: 
+</span><span class="">   52:     while(my $url = $loc-&gt;get_next_entry()) {
+</span><span class="">   53: 	print &quot;$url\n&quot;;
+</span><span class="">   54:     }
+</span><span class="">   55: 
+</span><span class="">   56: =head1 DESCRIPTION
+</span><span class="">   57: 
+</span><span class="">   58: The B&lt;Genealogy::ChroniclingAmerica&gt; module allows users to search for historical newspaper records from the B&lt;Chronicling America&gt; archive,
+</span><span class="">   59: maintained by the Library of Congress.
+</span><span class="">   60: By providing a person&#39;s first name,
+</span><span class="">   61: last name,
+</span><span class="">   62: and state,
+</span><span class="">   63: the module constructs and executes search queries,
+</span><span class="">   64: retrieving URLs to relevant newspaper pages in JSON format.
+</span><span class="">   65: It supports additional filters like date of birth and date of death,
+</span><span class="">   66: enforces B&lt;rate-limiting&gt; to comply with API request limits,
+</span><span class="">   67: local caching,
+</span><span class="">   68: and includes robust error handling and validation.
+</span><span class="">   69: Ideal for genealogy research,
+</span><span class="">   70: this module streamlines access to historical newspaper archives with an easy-to-use interface.
+</span><span class="">   71: 
+</span><span class="">   72: =over 4
+</span><span class="">   73: 
+</span><span class="">   74: =item * Rate-Limiting
+</span><span class="">   75: 
+</span><span class="">   76: A minimum interval between successive API calls can be enforced to ensure that the API is not overwhelmed and to comply with any request throttling requirements.
+</span><span class="">   77: 
+</span><span class="">   78: Rate-limiting is implemented using L&lt;Time::HiRes&gt;.
+</span><span class="">   79: A minimum interval between API
+</span><span class="">   80: calls can be specified via the C&lt;min_interval&gt; parameter in the constructor.
+</span><span class="">   81: Before making an API call,
+</span><span class="">   82: the module checks how much time has elapsed since the
+</span><span class="">   83: last request and,
+</span><span class="">   84: if necessary,
+</span><span class="">   85: sleeps for the remaining time.
+</span><span class="">   86: 
+</span><span class="">   87: =back
+</span><span class="">   88: 
+</span><span class="">   89: =head1 SUBROUTINES/METHODS
+</span><span class="">   90: 
+</span><span class="">   91: =head2 new
+</span><span class="">   92: 
+</span><span class="">   93: Creates a Genealogy::ChroniclingAmerica object.
+</span><span class="">   94: 
+</span><span class="">   95: It takes three mandatory arguments:
+</span><span class="">   96: 
+</span><span class="">   97: =over 4
+</span><span class="">   98: 
+</span><span class="">   99: =item * C&lt;firstname&gt;
+</span><span class="">  100: 
+</span><span class="">  101: =item * C&lt;lastname&gt;
+</span><span class="">  102: 
+</span><span class="">  103: =item * C&lt;state&gt; - Must be the full name,
+</span><span class="">  104: not an abbreviation.
+</span><span class="">  105: 
+</span><span class="">  106: =back
+</span><span class="">  107: 
+</span><span class="">  108: Accepts the following optional arguments:
+</span><span class="">  109: 
+</span><span class="">  110: =over 4
+</span><span class="">  111: 
+</span><span class="">  112: =item * C&lt;cache&gt;
+</span><span class="">  113: 
+</span><span class="">  114: A caching object.
+</span><span class="">  115: If not provided,
+</span><span class="">  116: an in-memory cache is created with a default expiration of one hour.
+</span><span class="">  117: 
+</span><span class="">  118: =item * C&lt;middlename&gt;
+</span><span class="">  119: 
+</span><span class="">  120: =item * C&lt;date_of_birth&gt;
+</span><span class="">  121: 
+</span><span class="">  122: =item * C&lt;date_of_death&gt;
+</span><span class="">  123: 
+</span><span class="">  124: =item * C&lt;host&gt; - The domain of the site to search, the default is C&lt;www.loc.gov&gt;.
+</span><span class="">  125: 
+</span><span class="">  126: =item * C&lt;ua&gt; - An object that understands get and env_proxy messages,
+</span><span class="">  127: such as L&lt;LWP::UserAgent::Throttled&gt;.
+</span><span class="">  128: 
+</span><span class="">  129: =item * C&lt;min_interval&gt; - Amount to rate limit.
+</span><span class="">  130: Defaults to 4 seconds,
+</span><span class="">  131: inline with L&lt;https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/README.html#rate-limits&gt;
+</span><span class="">  132: 
+</span><span class="">  133: =back
+</span><span class="">  134: 
+</span><span class="">  135: If a search finds nothing it is repeated once,
+</span><span class="">  136: since the Library of Congress sometimes answers an identical search inconsistently.
+</span><span class="">  137: 
+</span><span class="">  138: =head3 API SPECIFICATION
+</span><span class="">  139: 
+</span><span class="">  140: =head4 INPUT
+</span><span class="">  141: 
+</span><span class="">  142:   {
+</span><span class="">  143:     firstname =&gt; { type =&gt; &#39;string&#39;, min =&gt; 1, matches =&gt; qr/\D/ },
+</span><span class="">  144:     lastname =&gt; { type =&gt; &#39;string&#39;, min =&gt; 1, matches =&gt; qr/\D/ },
+</span><span class="">  145:     state =&gt; { type =&gt; &#39;string&#39;, min =&gt; 3, matches =&gt; qr/^\D+$/ },	# Full name, not an abbreviation
+</span><span class="">  146:     middlename =&gt; { type =&gt; &#39;string&#39;, optional =&gt; 1 },
+</span><span class="">  147:     date_of_birth =&gt; { type =&gt; &#39;integer&#39;, optional =&gt; 1 },	# A year
+</span><span class="">  148:     date_of_death =&gt; { type =&gt; &#39;integer&#39;, optional =&gt; 1 },	# A year
+</span><span class="">  149:     host =&gt; { type =&gt; &#39;string&#39;, optional =&gt; 1 },
+</span><span class="">  150:     ua =&gt; { type =&gt; &#39;object&#39;, can =&gt; &#39;get&#39;, optional =&gt; 1 },
+</span><span class="">  151:     cache =&gt; { type =&gt; &#39;object&#39;, can =&gt; [&#39;get&#39;, &#39;set&#39;], optional =&gt; 1 },
+</span><span class="">  152:     min_interval =&gt; { type =&gt; &#39;number&#39;, optional =&gt; 1 },
+</span><span class="">  153:   }
+</span><span class="">  154: 
+</span><span class="">  155: The constructor croaks if a mandatory argument is missing or invalid.
+</span><span class="">  156: 
+</span><span class="">  157: =head4 OUTPUT
+</span><span class="">  158: 
+</span><span class="">  159: A blessed C&lt;Genealogy::ChroniclingAmerica&gt; object.
+</span><span class="">  160: Called on an existing object it returns a clone with the new arguments.
+</span><span class="">  161: 
+</span><span class="">  162: =cut
+</span><span class="">  163: 
+</span><span class="">  164: sub new {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">165 → 172 → 177</span></span>  165: 	my $class = shift;
+</span><span class="">  166: 
+</span><span class="">  167: 	return unless(defined($class));
+</span><span class="">  168: 
+</span><span class="">  169: 	# Handle hash or hashref arguments
+</span><span class="">  170: 	my $params = Params::Get::get_params(undef, \@_) || {};
+</span><span class="">  171: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  172: 	if(Scalar::Util::blessed($class)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  173: 		# If $class is an object, clone it with new arguments
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  174: 		return bless { %{$class}, %{$params} }, ref($class);
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>BOOL_NEGATE_174_3: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boolean branch test suggestion
+ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>RETURN_UNDEF_174_3: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Return value assertion
+is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class="">  175: 	}
+</span><span class="">  176: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">177 → 177 → 182</span></span>  177: 	unless($params-&gt;{&#39;firstname&#39;}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  178: 		Carp::croak(&#39;Firstname is not optional&#39;);
+</span><span class="">  179: 	}
+</span><span class="">  180: 
+</span><span class="">  181: 	# Fail when the input is just a set of numbers
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">182 → 182 → 187</span></span>  182: 	if($params-&gt;{&#39;firstname&#39;} !~ /\D/) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  183: 		Carp::croak(&#39;Usage: &#39;, __PACKAGE__, &quot;: invalid input to new(), $params-&gt;{firstname}&quot;);
+</span><span class="">  184: 		return;
+</span><span class="">  185: 	}
+</span><span class="">  186: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">187 → 187 → 193</span></span>  187: 	unless(defined($params-&gt;{&#39;lastname&#39;})) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  188: 		Carp::croak(&#39;Lastname is not optional&#39;);
+</span><span class="">  189: 		return;
+</span><span class="">  190: 	}
+</span><span class="">  191: 
+</span><span class="">  192: 	# Fail when the input is just a set of numbers
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">193 → 193 → 198</span></span>  193: 	if($params-&gt;{&#39;lastname&#39;} !~ /\D/) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  194: 		Carp::croak(&#39;Usage: &#39;, __PACKAGE__, &quot;: invalid input to new(), $params-&gt;{lastname}&quot;);
+</span><span class="">  195: 		return;
+</span><span class="">  196: 	}
+</span><span class="">  197: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">198 → 198 → 203</span></span>  198: 	unless($params-&gt;{&#39;state&#39;}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  199: 		Carp::croak(&#39;State is not optional&#39;);
+</span><span class="">  200: 		return;
+</span><span class="">  201: 	}
+</span><span class="">  202: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">203 → 203 → 209</span></span>  203: 	if(length($params-&gt;{&#39;state&#39;}) == 2) {
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  204: 		Carp::croak(&#39;State needs to be the full name&#39;);
+</span><span class="">  205: 		return;
+</span><span class="">  206: 	}
+</span><span class="">  207: 
+</span><span class="">  208: 	# Fail when the input contains a number
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">209 → 209 → 214</span></span>  209: 	if($params-&gt;{&#39;state&#39;} =~ /\d/) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  210: 		Carp::croak(&#39;Usage: &#39;, __PACKAGE__, &quot;: invalid input to new(), $params-&gt;{state}&quot;);
+</span><span class="">  211: 		return;
+</span><span class="">  212: 	}
+</span><span class="">  213: 
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">214 → 217 → 240</span></span>  214: 	$params = Object::Configure::configure($class, $params);
+</span><span class="">  215: 
+</span><span class="">  216: 	my $ua = $params-&gt;{&#39;ua&#39;};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  217: 	if(!defined($ua)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  218: 		my $ssl_opts;
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  219: 		if(-r &#39;/etc/ssl/certs/ca-certificates.crt&#39;) {	# Linux
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_219_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  220: 			$ssl_opts = {
+</span><span class="">  221: 				&#39;SSL_ca_file&#39; =&gt; &#39;/etc/ssl/certs/ca-certificates.crt&#39;,
+</span><span class="">  222: 				verify_hostname =&gt; 1
+</span><span class="">  223: 			}
+</span><span class="">  224: 		} elsif(-r &#39;/opt/homebrew/etc/ca-certificates/cert.pem&#39;) {	# MacOS
+</span><span class="">  225: 			$ssl_opts = {
+</span><span class="">  226: 				&#39;SSL_ca_file&#39; =&gt; &#39;/opt/homebrew/etc/ca-certificates/cert.pem&#39;,
+</span><span class="">  227: 				verify_hostname =&gt; 1
+</span><span class="">  228: 			}
+</span><span class="">  229: 		} else {
+</span><span class="">  230: 			$ssl_opts = { verify_hostname =&gt; 0 };
+</span><span class="">  231: 		}
+</span><span class="">  232: 		$ua = LWP::UserAgent-&gt;new(
+</span><span class="">  233: 			ssl_opts =&gt; $ssl_opts,
+</span><span class="">  234: 			agent =&gt; __PACKAGE__ . &quot;/$VERSION&quot;
+</span><span class="">  235: 		);
+</span><span class="">  236: 		$ua-&gt;env_proxy(1);
+</span><span class="">  237: 	}
+</span><span class="">  238: 
+</span><span class="">  239: 	# Set up caching (default to an in-memory cache if none provided)
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">240 → 261 → 264</span></span>  240: 	my $cache = $params-&gt;{cache} || CHI-&gt;new(
+</span><span class="">  241: 		driver =&gt; &#39;Memory&#39;,
+</span><span class="">  242: 		global =&gt; 1,
+</span><span class="">  243: 		expires_in =&gt; &#39;1 hour&#39;,
+</span><span class="">  244: 	);
+</span><span class="">  245: 
+</span><span class="">  246: 	# Set up rate-limiting: minimum interval between requests (in seconds)
+</span><span class="">  247: 	# From https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/README.html#rate-limits
+</span><span class="">  248: 	# Burst Limit: 20 requests per 1 minute, Block for 5 minutes
+</span><span class="">  249: 	my $min_interval = $params-&gt;{min_interval} || 4;	# default: four second delay
+</span><span class="">  250: 
+</span><span class="">  251: 	my $rc = {
+</span><span class="">  252: 		%{$params},
+</span><span class="">  253: 		min_interval =&gt; $min_interval,
+</span><span class="">  254: 		ua =&gt; $ua,
+</span><span class="">  255: 		host =&gt; $params-&gt;{&#39;host&#39;} || &#39;www.loc.gov&#39;,
+</span><span class="">  256: 		path =&gt; &#39;collections/chronicling-america&#39;,
+</span><span class="">  257: 		cache =&gt; $cache,
+</span><span class="">  258: 	};
+</span><span class="">  259: 
+</span><span class="">  260: 	my %query_parameters = ( &#39;fo&#39; =&gt; &#39;json&#39;, &#39;location_state&#39; =&gt; ucfirst(lc($params-&gt;{&#39;state&#39;})), &#39;ops&#39; =&gt; &#39;PHRASE&#39;, &#39;searchType&#39; =&gt; &#39;advanced&#39; );
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  261: 	if($query_parameters{&#39;location_state&#39;} eq &#39;District of columbia&#39;) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_261_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  262: 		$query_parameters{&#39;location_state&#39;} = &#39;District of Columbia&#39;;
+</span><span class="">  263: 	}
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">264 → 265 → 271</span></span>  264: 	my $name = $params-&gt;{&#39;firstname&#39;};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  265: 	if($params-&gt;{&#39;middlename&#39;}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  266: 		$rc-&gt;{&#39;name&#39;} = &quot;$name $params-&gt;{middlename} $params-&gt;{lastname}&quot;;
+</span><span class="">  267: 		$name .= &#39;+&#39; . $params-&gt;{middlename};
+</span><span class="">  268: 	} else {
+</span><span class="">  269: 		$rc-&gt;{&#39;name&#39;} = &quot;$name $params-&gt;{lastname}&quot;;
+</span><span class="">  270: 	}
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">271 → 276 → 279</span></span>  271: 	$name .= &quot;+$params-&gt;{lastname}&quot;;
+</span><span class="">  272: 
+</span><span class="">  273: 	$name =~ s/\s/+/g;
+</span><span class="">  274: 
+</span><span class="">  275: 	$query_parameters{&#39;qs&#39;} = $name;
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  276: 	if($params-&gt;{&#39;date_of_birth&#39;}) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_276_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  277: 		$query_parameters{&#39;start_date&#39;} = $params-&gt;{&#39;date_of_birth&#39;};
+</span><span class="">  278: 	}
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">279 → 279 → 284</span></span>  279: 	if($params-&gt;{&#39;date_of_death&#39;}) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_279_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  280: 		$query_parameters{&#39;end_date&#39;} = $params-&gt;{&#39;date_of_death&#39;};
+</span><span class="">  281: 	}
+</span><span class="">  282: 
+</span><span class="">  283: 	# Just scanning for one year
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">284 → 299 → 305</span></span>  284: 	$query_parameters{&#39;start_date&#39;} ||= $params-&gt;{&#39;date_of_death&#39;};
+</span><span class="">  285: 	$query_parameters{&#39;end_date&#39;} ||= $params-&gt;{&#39;date_of_birth&#39;};
+</span><span class="">  286: 
+</span><span class="">  287: 	$query_parameters{&#39;start_date&#39;} .= &#39;-01-01&#39; if($query_parameters{&#39;start_date&#39;});
+</span><span class="">  288: 	$query_parameters{&#39;end_date&#39;} .= &#39;-12-31&#39; if($query_parameters{&#39;end_date&#39;});
+</span><span class="">  289: 
+</span><span class="">  290: 	my $uri = URI-&gt;new(&quot;https://$rc-&gt;{host}/$rc-&gt;{path}&quot;);
+</span><span class="">  291: 	$uri-&gt;query_form(%query_parameters);
+</span><span class="">  292: 	my $url = $uri-&gt;as_string();
+</span><span class="">  293: 	# ::diag(&quot;&gt;&gt;&gt;&gt;$url = &quot;, $rc-&gt;{&#39;name&#39;});
+</span><span class="">  294: 	# print &quot;&gt;&gt;&gt;&gt;$url = &quot;, $rc-&gt;{&#39;name&#39;}, &quot;\n&quot;;
+</span><span class="">  295: 
+</span><span class="">  296: 	my $items = _get_items($ua, $url);
+</span><span class="">  297: 
+</span><span class="">  298: 	# loc.gov sometimes answers an identical search with no results, so try once more
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  299: 	unless(scalar(@{$items})) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  300: 		Time::HiRes::sleep($min_interval);
+</span><span class="">  301: 		$items = _get_items($ua, $url);
+</span><span class="">  302: 	}
+</span><span class="">  303: 
+</span><span class="">  304: 	# Update last_request timestamp
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">305 → 307 → 323</span></span>  305: 	$rc-&gt;{&#39;last_request&#39;} = time();
+</span><span class="">  306: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  307: 	if(scalar(@{$items})) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  308: 		# Add &#39;fo=json&#39; to the end of each row
+</span><span class="">  309: 		my @rc;
+</span><span class="">  310: 		for my $item (@{$items}) {
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  311: 			unless($item-&gt;{&#39;id&#39;} =~ /&amp;fo=json$/) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_311_4: Invert condition unless to if</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  312: 				$item-&gt;{&#39;id&#39;} .= &#39;&amp;fo=json&#39;;
+</span><span class="">  313: 			}
+</span><span class="">  314: 			push @rc, $item;
+</span><span class="">  315: 		}
+</span><span class="">  316: 		$rc-&gt;{&#39;items&#39;} = \@rc;
+</span><span class="">  317: 		$rc-&gt;{&#39;index&#39;} = 0;
+</span><span class="">  318: 		$rc-&gt;{&#39;matches&#39;} = scalar(@rc);
+</span><span class="">  319: 	} else {
+</span><span class="">  320: 		$rc-&gt;{&#39;matches&#39;} = 0;
+</span><span class="">  321: 	}
+</span><span class="">  322: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  323: 	return bless $rc, $class;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  324: }
+</span><span class="">  325: 
+</span><span class="">  326: =head2 get_next_entry
+</span><span class="">  327: 
+</span><span class="">  328: Returns the next match as a URL of a PDF of the newspaper page,
+</span><span class="">  329: or undef when there are no more matches.
+</span><span class="">  330: 
+</span><span class="">  331: Each call may make up to two requests of the Library of Congress:
+</span><span class="">  332: one for the item and one for the OCR text of its page.
+</span><span class="">  333: Items whose text doesn&#39;t contain the person&#39;s name are skipped.
+</span><span class="">  334: Both requests honour C&lt;min_interval&gt;.
+</span><span class="">  335: 
+</span><span class="">  336: The URL is not checked,
+</span><span class="">  337: the Library of Congress may refuse (HTTP 403) requests for the PDF from some automated clients.
+</span><span class="">  338: 
+</span><span class="">  339: =head3 API SPECIFICATION
+</span><span class="">  340: 
+</span><span class="">  341: =head4 INPUT
+</span><span class="">  342: 
+</span><span class="">  343: None, other than the object.
+</span><span class="">  344: 
+</span><span class="">  345: =head4 OUTPUT
+</span><span class="">  346: 
+</span><span class="">  347:   {
+</span><span class="">  348:     type =&gt; &#39;string&#39;,
+</span><span class="">  349:     min =&gt; 5,
+</span><span class="">  350:     matches =&gt; qr/\.pdf$/,	# A URL
+</span><span class="">  351:     optional =&gt; 1,	# undef when no more matches
+</span><span class="">  352:   }
+</span><span class="">  353: 
+</span><span class="">  354: =cut
+</span><span class="">  355: 
+</span><span class="">  356: sub get_next_entry
+</span><span class="">  357: {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">358 → 368 → 373</span></span>  358: 	my $self = shift;
+</span><span class="">  359: 
+</span><span class="">  360: 	# Exit if no matches or index out of bounds
+</span><span class="survived-3 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one).">  361: 	return if($self-&gt;{&#39;matches&#39;} == 0) || ($self-&gt;{&#39;index&#39;} &gt;= $self-&gt;{&#39;matches&#39;});
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 4, Killed: 1, Survived: 3)</summary>
+					<ul>
+				<li><b>NUM_BOUNDARY_361_58_&gt;: Numeric boundary flip &gt;= to &gt;</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>NUM_BOUNDARY_361_58_&lt;: Numeric boundary flip &gt;= to &lt;</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>NUM_BOUNDARY_361_58_&lt;=: Numeric boundary flip &gt;= to &lt;=</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class="">  362: 
+</span><span class="">  363: 	# Retrieve the next entry and increment index
+</span><span class="">  364: 	my $entry = $self-&gt;{&#39;items&#39;}-&gt;[$self-&gt;{&#39;index&#39;}++];
+</span><span class="">  365: 
+</span><span class="">  366: 	# Create a cache key based on the location, date and time zone (might want to use a stronger hash function if needed)
+</span><span class="">  367: 	my $cache_key = &quot;loc:$entry-&gt;{id}&quot;;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  368: 	if(my $cached = $self-&gt;{cache}-&gt;get($cache_key)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  369: 		return $cached;
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>BOOL_NEGATE_369_3: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boolean branch test suggestion
+ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>RETURN_UNDEF_369_3: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Return value assertion
+is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class="">  370: 	}
+</span><span class="">  371: 
+</span><span class="">  372: 	# Enforce rate-limiting: ensure at least min_interval seconds between requests.
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">373 → 375 → 380</span></span>  373: 	my $now = time();
+</span><span class="">  374: 	my $elapsed = $now - $self-&gt;{last_request};
+</span><span class="survived-3 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one). Mutation survived. Add targeted tests to validate this branch.">  375: 	if($elapsed &lt; $self-&gt;{min_interval}) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 4, Killed: 0, Survived: 4)</summary>
+					<ul>
+				<li><b>NUM_BOUNDARY_375_14_&gt;: Numeric boundary flip &lt; to &gt;</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>NUM_BOUNDARY_375_14_&lt;=: Numeric boundary flip &lt; to &lt;=</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>NUM_BOUNDARY_375_14_&gt;=: Numeric boundary flip &lt; to &gt;=</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>COND_INV_375_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  376: 		Time::HiRes::sleep($self-&gt;{min_interval} - $elapsed);
+</span><span class="">  377: 	}
+</span><span class="">  378: 
+</span><span class="">  379: 	# Make the API request
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">380 → 386 → 391</span></span>  380: 	my $resp = $self-&gt;{&#39;ua&#39;}-&gt;get($entry-&gt;{&#39;id&#39;});
+</span><span class="">  381: 
+</span><span class="">  382: 	# Update last_request timestamp
+</span><span class="">  383: 	$self-&gt;{last_request} = time();
+</span><span class="">  384: 
+</span><span class="">  385: 	# Handle error responses
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  386: 	if($resp-&gt;is_error()) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="survived-1 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one).">  387: 		Carp::carp(&quot;get_next_entry: API returned error on $entry-&gt;{id}: &quot;, $resp-&gt;status_line()) unless($resp-&gt;code() == 404);
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>NUM_BOUNDARY_387_113_!=: Numeric boundary flip == to !=</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class="">  388: 		return;
+</span><span class="">  389: 	}
+</span><span class="">  390: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">391 → 391 → 395</span></span>  391: 	unless($resp-&gt;is_success()) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  392: 		Carp::croak($resp-&gt;status_line());
+</span><span class="">  393: 	}
+</span><span class="">  394: 
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">395 → 399 → 404</span></span>  395: 	my $data;
+</span><span class="">  396: 	eval {
+</span><span class="">  397: 		$data = decode_json($resp-&gt;decoded_content())
+</span><span class="">  398: 	};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  399: 	if($@) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  400: 		Carp::carp(&quot;$@: &quot;, $resp-&gt;decoded_content());
+</span><span class="">  401: 		return;
+</span><span class="">  402: 	}
+</span><span class="">  403: 
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">404 → 405 → 409</span></span>  404: 	my $full_text = $data-&gt;{&#39;full_text&#39;};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  405: 	if(!defined($full_text)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  406: 		# loc.gov now serves the text from a separate service
+</span><span class="">  407: 		$full_text = $self-&gt;_fetch_full_text($data);
+</span><span class="">  408: 	}
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">409 → 409 → 413</span></span>  409: 	if(!defined($full_text)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  410: 		return $self-&gt;get_next_entry();
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>BOOL_NEGATE_410_3: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boolean branch test suggestion
+ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>RETURN_UNDEF_410_3: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Return value assertion
+is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class="">  411: 	}
+</span><span class="">  412: 
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">413 → 414 → 419</span></span>  413: 	$full_text =~ s/[\r\n]/ /g;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  414: 	if($full_text !~ /\Q$self-&gt;{&#39;name&#39;}\E/ims) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  415: 		return $self-&gt;get_next_entry();
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  416: 	}
+</span><span class="">  417: 
+</span><span class="">  418: 	# The PDF is now given in the &#39;resource&#39; section
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">419 → 419 → 424</span></span>  419: 	if(ref($data-&gt;{&#39;resource&#39;}) eq &#39;HASH&#39; &amp;&amp; (my $pdf = $data-&gt;{&#39;resource&#39;}-&gt;{&#39;pdf&#39;})) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  420: 		$self-&gt;{&#39;cache&#39;}-&gt;set($cache_key, $pdf);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  421: 		return Return::Set::set_return($pdf, { type =&gt; &#39;string&#39;, &#39;min&#39; =&gt; 5, matches =&gt; qr/\.pdf$/ });
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  422: 	}
+</span><span class="">  423: 
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 424 → 424 → 0</span></span>  424: 	foreach my $page(@{$data-&gt;{&#39;page&#39;}}) {
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  425: 		if($page-&gt;{&#39;mimetype&#39;} eq &#39;application/pdf&#39;) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_425_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  426: 			# Cache the result before returning it
+</span><span class="">  427: 			$self-&gt;{&#39;cache&#39;}-&gt;set($cache_key, $page-&gt;{&#39;url&#39;});
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  428: 			return Return::Set::set_return($page-&gt;{&#39;url&#39;}, { type =&gt; &#39;string&#39;, &#39;min&#39; =&gt; 5, matches =&gt; qr/\.pdf$/ });
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>BOOL_NEGATE_428_4: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boolean branch test suggestion
+ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>RETURN_UNDEF_428_4: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Return value assertion
+is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class="">  429: 		}
+</span><span class="">  430: 	}
+</span><span class="">  431: }
+</span><span class="">  432: 
+</span><span class="">  433: # Fetch the OCR text of a page from the &#39;fulltext_file&#39; service, returns undef on any failure
+</span><span class="">  434: sub _fetch_full_text
+</span><span class="">  435: {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">436 → 443 → 446</span></span>  436: 	my ($self, $data) = @_;
+</span><span class="">  437: 
+</span><span class="">  438: 	my $url = (ref($data-&gt;{&#39;resource&#39;}) eq &#39;HASH&#39; &amp;&amp; $data-&gt;{&#39;resource&#39;}-&gt;{&#39;fulltext_file&#39;}) || $data-&gt;{&#39;fulltext_service&#39;};
+</span><span class="">  439: 	return unless($url);
+</span><span class="">  440: 
+</span><span class="">  441: 	my $now = time();
+</span><span class="">  442: 	my $elapsed = $now - $self-&gt;{&#39;last_request&#39;};
+</span><span class="survived-3 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one). Mutation survived. Add targeted tests to validate this branch.">  443: 	if($elapsed &lt; $self-&gt;{&#39;min_interval&#39;}) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 4, Killed: 0, Survived: 4)</summary>
+					<ul>
+				<li><b>NUM_BOUNDARY_443_14_&gt;: Numeric boundary flip &lt; to &gt;</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>NUM_BOUNDARY_443_14_&lt;=: Numeric boundary flip &lt; to &lt;=</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>NUM_BOUNDARY_443_14_&gt;=: Numeric boundary flip &lt; to &gt;=</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>COND_INV_443_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  444: 		Time::HiRes::sleep($self-&gt;{&#39;min_interval&#39;} - $elapsed);
+</span><span class="">  445: 	}
+</span><span class="">  446: 	my $resp = $self-&gt;{&#39;ua&#39;}-&gt;get($url);
+</span><span class="">  447: 	$self-&gt;{&#39;last_request&#39;} = time();
+</span><span class="">  448: 
+</span><span class="">  449: 	return unless($resp-&gt;is_success());
+</span><span class="">  450: 
+</span><span class="">  451: 	my $json;
+</span><span class="">  452: 	eval { $json = decode_json($resp-&gt;decoded_content()) };
+</span><span class="">  453: 	return if($@ || ref($json) ne &#39;HASH&#39;);
+</span><span class="">  454: 
+</span><span class="">  455: 	# Keyed by segment name
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  456: 	return join(&#39; &#39;, map { ref($_) eq &#39;HASH&#39; ? ($_-&gt;{&#39;full_text&#39;} // ()) : () } values %{$json});
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  457: }
+</span><span class="">  458: 
+</span><span class="">  459: # This is the sample code at https://libraryofcongress.github.io/data-exploration/loc.gov%20JSON%20API/Chronicling_America/ChronAm-download_results.html
+</span><span class="">  460: #	translated into Perl
+</span><span class="">  461: 
+</span><span class="">  462: # Run P1 search and get a list of results
+</span><span class="">  463: 
+</span><span class="">  464: sub _get_items
+</span><span class="">  465: {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">466 → 474 → 486</span></span>  466: 	my ($ua, $url, $items_ref, $conditional, $depth) = @_;
+</span><span class="">  467: 
+</span><span class="">  468: 	$items_ref ||= [];
+</span><span class="">  469: 	$conditional ||= &#39;True&#39;;
+</span><span class="">  470: 	$depth ||= 0;
+</span><span class="">  471: 
+</span><span class="">  472: 	# Check that the query URL is not an item or resource link
+</span><span class="">  473: 	my @exclude = (&#39;loc.gov/item&#39;, &#39;loc.gov/resource&#39;);
+</span><span class="">  474: 	for my $string (@exclude) {
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  475: 		if (index($url, $string) != -1) {
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  476: 			Carp::croak(&#39;Your URL points directly to an item or &#39;,
+</span><span class="">  477: 			  &#39;resource page (you can tell because &quot;item&quot; &#39;,
+</span><span class="">  478: 			  &#39;or &quot;resource&quot; is in the URL). Please use &#39;,
+</span><span class="">  479: 			  &#39;a search URL instead. For example, instead &#39;,
+</span><span class="">  480: 			  &#39;of &quot;https://www.loc.gov/item/2009581123/&quot;, &#39;,
+</span><span class="">  481: 			  &#39;try &quot;https://www.loc.gov/maps/?q=2009581123&quot;.&#39;);
+</span><span class="">  482: 		}
+</span><span class="">  483: 	}
+</span><span class="">  484: 
+</span><span class="">  485: 	# Create URI object and add parameters
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">486 → 500 → 546</span></span>  486: 	my $uri = URI-&gt;new($url);
+</span><span class="">  487: 	$uri-&gt;query_form(
+</span><span class="">  488: 		$uri-&gt;query_form(),
+</span><span class="">  489: 		fo =&gt; &#39;json&#39;,
+</span><span class="">  490: 		c =&gt; 100,
+</span><span class="">  491: 		at =&gt; &#39;results,pagination&#39;
+</span><span class="">  492: 	);
+</span><span class="">  493: 
+</span><span class="">  494: 	# Make HTTP request
+</span><span class="">  495: 	# ::diag(__LINE__);
+</span><span class="">  496: 	# ::diag($uri);
+</span><span class="">  497: 	my $response = $ua-&gt;get($uri);
+</span><span class="">  498: 
+</span><span class="">  499: 	# Check that the API request was successful
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  500: 	if($response-&gt;is_success() &amp;&amp; $response-&gt;header(&#39;Content-Type&#39;) &amp;&amp; ($response-&gt;header(&#39;Content-Type&#39;) =~ /json/)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  501: 		my $data = decode_json($response-&gt;decoded_content());
+</span><span class="">  502: 		my $results = $data-&gt;{results};
+</span><span class="">  503: 
+</span><span class="">  504: 		for my $result(@{$results}) {
+</span><span class="">  505: 			# Filter out anything that&#39;s a collection or web page
+</span><span class="">  506: 			my $original_format = $result-&gt;{original_format} || [];
+</span><span class="">  507: 			my $filter_out = 0;
+</span><span class="">  508: 
+</span><span class="">  509: 			# Check if original_format contains &quot;collection&quot; or &quot;web page&quot;
+</span><span class="">  510: 			for my $format (@$original_format) {
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  511: 				if ($format =~ /collection/i || $format =~ /web page/i) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_511_5: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  512: 					$filter_out = 1;
+</span><span class="">  513: 					last;
+</span><span class="">  514: 				}
+</span><span class="">  515: 			}
+</span><span class="">  516: 
+</span><span class="">  517: 			# Evaluate conditional (simplified - assumes &#39;True&#39; means true)
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  518: 			if ($conditional ne &#39;True&#39;) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  519: 				$filter_out = 1;
+</span><span class="">  520: 			}
+</span><span class="">  521: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  522: 			unless ($filter_out) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  523: 				# Get the link to the item record
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  524: 				if (my $item = $result-&gt;{id}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  525: 					# Filter out links to Catalog or other platforms
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  526: 					if ($item =~ /^http:\/\/www\.loc\.gov\/resource/) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  527: 						# my $resource = $item; # Assign item to resource
+</span><span class="">  528: 						# push @$items_ref, $resource;
+</span><span class="">  529: 						push @$items_ref, $result;
+</span><span class="">  530: 					}
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  531: 					if ($item =~ /^http:\/\/www\.loc\.gov\/item/) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  532: 						push @$items_ref, $result;
+</span><span class="">  533: 					}
+</span><span class="">  534: 				}
+</span><span class="">  535: 			}
+</span><span class="">  536: 		}
+</span><span class="">  537: 
+</span><span class="">  538: 		# Repeat the loop on the next page, unless we&#39;re on the last page
+</span><span class="">  539: 		# Put the $depth in case the end of list code doesn&#39;t work
+</span><span class="survived-3 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one). Mutation survived. Add targeted tests to validate this branch.">  540: 		if(($depth &lt;= 10) &amp;&amp; defined(my $next_url = $data-&gt;{pagination}-&gt;{next})) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 4, Killed: 0, Survived: 4)</summary>
+					<ul>
+				<li><b>NUM_BOUNDARY_540_14_&lt;: Numeric boundary flip &lt;= to &lt;</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>NUM_BOUNDARY_540_14_&gt;: Numeric boundary flip &lt;= to &gt;</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>NUM_BOUNDARY_540_14_&gt;=: Numeric boundary flip &lt;= to &gt;=</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>COND_INV_540_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  541: 			_get_items($ua, $next_url, $items_ref, $conditional, $depth + 1);
+</span><span class="">  542: 		}
+</span><span class="">  543: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  544: 		return $items_ref;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  545: 	}
+</span><span class="">  546: 	Carp::carp($url, &#39;: &#39;, $response-&gt;status_line());
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  547: 	return $items_ref;
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>BOOL_NEGATE_547_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boolean branch test suggestion
+ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>RETURN_UNDEF_547_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Return value assertion
+is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class="">  548: }
+</span><span class="">  549: 
+</span><span class="">  550: =head1 AUTHOR
+</span><span class="">  551: 
+</span><span class="">  552: Nigel Horne, C&lt;&lt; &lt;njh at nigelhorne.com&gt; &gt;&gt;
+</span><span class="">  553: 
+</span><span class="">  554: =head1 BUGS
+</span><span class="">  555: 
+</span><span class="">  556: If a middle name is given and no match is found,
+</span><span class="">  557: it should search again without the middle name.
+</span><span class="">  558: 
+</span><span class="">  559: =head1 SEE ALSO
+</span><span class="">  560: 
+</span><span class="">  561: =over 4
+</span><span class="">  562: 
+</span><span class="">  563: =item * L&lt;https://github.com/nigelhorne/gedcom&gt;
+</span><span class="">  564: 
+</span><span class="">  565: =item * L&lt;https://chroniclingamerica.loc.gov&gt;
+</span><span class="">  566: 
+</span><span class="">  567: =item * L&lt;https://github.com/LibraryOfCongress/data-exploration&gt;
+</span><span class="">  568: 
+</span><span class="">  569: =back
+</span><span class="">  570: 
+</span><span class="">  571: =head1 SUPPORT
+</span><span class="">  572: 
+</span><span class="">  573: This module is provided as-is without any warranty.
+</span><span class="">  574: 
+</span><span class="">  575: Please report any bugs or feature requests to C&lt;bug-genealogy-chroniclingamerica at rt.cpan.org&gt;,
+</span><span class="">  576: or through the web interface at
+</span><span class="">  577: L&lt;http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-ChroniclingAmerica&gt;.
+</span><span class="">  578: I will be notified, and then you&#39;ll
+</span><span class="">  579: automatically be notified of progress on your bug as I make changes.
+</span><span class="">  580: 
+</span><span class="">  581: You can find documentation for this module with the perldoc command.
+</span><span class="">  582: 
+</span><span class="">  583:     perldoc Genealogy::ChroniclingAmerica
+</span><span class="">  584: 
+</span><span class="">  585: You can also look for information at:
+</span><span class="">  586: 
+</span><span class="">  587: =over 4
+</span><span class="">  588: 
+</span><span class="">  589: =item * RT: CPAN&#39;s request tracker
+</span><span class="">  590: 
+</span><span class="">  591: L&lt;http://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-ChroniclingAmerica&gt;
+</span><span class="">  592: 
+</span><span class="">  593: =item * Search CPAN
+</span><span class="">  594: 
+</span><span class="">  595: L&lt;https://metacpan.org/release/Genealogy-ChroniclingAmerica&gt;
+</span><span class="">  596: 
+</span><span class="">  597: =back
+</span><span class="">  598: 
+</span><span class="">  599: =head1 LICENSE AND COPYRIGHT
+</span><span class="">  600: 
+</span><span class="">  601: Copyright 2018-2026 Nigel Horne.
+</span><span class="">  602: 
+</span><span class="">  603: This program is released under the following licence: GPL2
+</span><span class="">  604: 
+</span><span class="">  605: =cut
+</span><span class="">  606: 
+</span><span class="">  607: 1; # End of Genealogy::ChroniclingAmerica
+</span></pre>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+}
+
+(function() {
+    const saved = localStorage.getItem('theme');
+    if(saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+    }
+})();
+
+document.addEventListener("mousemove", function(e) {
+	document.querySelectorAll(".lcsaj-tip-text, .cpd-tip-text").forEach(function(tip) {
+		tip.style.left = (e.clientX + 12) + "px";
+		tip.style.top  = (e.clientY + 12) + "px";
+	});
+});
+</script>
+</body>
+</html>
+	

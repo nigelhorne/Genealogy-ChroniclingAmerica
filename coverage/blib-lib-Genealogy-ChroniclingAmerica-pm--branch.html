@@ -20,58 +20,58 @@ https://pjcj.net
 <h1>Branch Coverage</h1>
 <table>
 <tr><td class="h" align="right">File:</td><td align="left">blib/lib/Genealogy/ChroniclingAmerica.pm</td></tr>
-<tr><td class="h" align="right">Coverage:</td><td align="left" class="c0">0.0%</td></tr>
+<tr><td class="h" align="right">Coverage:</td><td align="left" class="c0">48.9%</td></tr>
 </table>
 <div><br/></div>
 <table>
 <tr><th>line</th><th>%</th><th colspan="2">coverage</th><th>branch</th></tr>
-<tr><td class="h"><a id="L140">140</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless defined $class</td></tr>
-<tr><td class="h"><a id="L145">145</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (&amp;Scalar::Util::blessed($class))</td></tr>
-<tr><td class="h"><a id="L150">150</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless ($params-&gt;{&#39;firstname&#39;})</td></tr>
-<tr><td class="h"><a id="L156">156</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless ($params-&gt;{&#39;firstname&#39;} =~ /\D/)</td></tr>
-<tr><td class="h"><a id="L161">161</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless (defined $params-&gt;{&#39;lastname&#39;})</td></tr>
-<tr><td class="h"><a id="L167">167</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless ($params-&gt;{&#39;lastname&#39;} =~ /\D/)</td></tr>
-<tr><td class="h"><a id="L172">172</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless ($params-&gt;{&#39;state&#39;})</td></tr>
-<tr><td class="h"><a id="L177">177</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (length $params-&gt;{&#39;state&#39;} == 2)</td></tr>
-<tr><td class="h"><a id="L183">183</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($params-&gt;{&#39;state&#39;} =~ /\d/)</td></tr>
-<tr><td class="h"><a id="L191">191</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless (defined $ua)</td></tr>
-<tr><td class="h"><a id="L193">193</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (-r &#39;/etc/ssl/certs/ca-certificates.crt&#39;) { }</td></tr>
+<tr><td class="h"><a id="L167">167</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $class</td></tr>
+<tr><td class="h"><a id="L172">172</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if (&amp;Scalar::Util::blessed($class))</td></tr>
+<tr><td class="h"><a id="L177">177</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless ($params-&gt;{&#39;firstname&#39;})</td></tr>
+<tr><td class="h"><a id="L182">182</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless ($params-&gt;{&#39;firstname&#39;} =~ /\D/)</td></tr>
+<tr><td class="h"><a id="L187">187</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless (defined $params-&gt;{&#39;lastname&#39;})</td></tr>
+<tr><td class="h"><a id="L193">193</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless ($params-&gt;{&#39;lastname&#39;} =~ /\D/)</td></tr>
+<tr><td class="h"><a id="L198">198</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless ($params-&gt;{&#39;state&#39;})</td></tr>
+<tr><td class="h"><a id="L203">203</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if (length $params-&gt;{&#39;state&#39;} == 2)</td></tr>
+<tr><td class="h"><a id="L209">209</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($params-&gt;{&#39;state&#39;} =~ /\d/)</td></tr>
+<tr><td class="h"><a id="L217">217</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless (defined $ua)</td></tr>
+<tr><td class="h"><a id="L219">219</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (-r &#39;/etc/ssl/certs/ca-certificates.crt&#39;) { }</td></tr>
 <tr><td class="h"></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">elsif (-r &#39;/opt/homebrew/etc/ca-certificates/cert.pem&#39;) { }</td></tr>
-<tr><td class="h"><a id="L235">235</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($query_parameters{&#39;location_state&#39;} eq &quot;District of columbia&quot;)</td></tr>
-<tr><td class="h"><a id="L239">239</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($params-&gt;{&#39;middlename&#39;}) { }</td></tr>
-<tr><td class="h"><a id="L250">250</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($params-&gt;{&#39;date_of_birth&#39;})</td></tr>
-<tr><td class="h"><a id="L253">253</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($params-&gt;{&#39;date_of_death&#39;})</td></tr>
-<tr><td class="h"><a id="L261">261</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if $query_parameters{&#39;start_date&#39;}</td></tr>
-<tr><td class="h"><a id="L262">262</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if $query_parameters{&#39;end_date&#39;}</td></tr>
-<tr><td class="h"><a id="L273">273</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless (scalar @{$items;})</td></tr>
-<tr><td class="h"><a id="L281">281</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (scalar @{$items;}) { }</td></tr>
-<tr><td class="h"><a id="L285">285</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless ($item-&gt;{&#39;id&#39;} =~ /&amp;fo=json$/)</td></tr>
-<tr><td class="h"><a id="L311">311</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if $self-&gt;{&#39;matches&#39;} == 0 or $self-&gt;{&#39;index&#39;} &gt;= $self-&gt;{&#39;matches&#39;}</td></tr>
-<tr><td class="h"><a id="L320">320</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (my $cached = $self-&gt;{&#39;cache&#39;}-&gt;get($cache_key))</td></tr>
-<tr><td class="h"><a id="L327">327</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($elapsed &lt; $self-&gt;{&#39;min_interval&#39;})</td></tr>
-<tr><td class="h"><a id="L343">343</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($resp-&gt;is_error)</td></tr>
-<tr><td class="h"><a id="L345">345</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless $resp-&gt;code == 404</td></tr>
-<tr><td class="h"><a id="L349">349</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless ($resp-&gt;is_success)</td></tr>
-<tr><td class="h"><a id="L357">357</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($@)</td></tr>
-<tr><td class="h"><a id="L363">363</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless (defined $full_text)</td></tr>
-<tr><td class="h"><a id="L367">367</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless (defined $full_text)</td></tr>
-<tr><td class="h"><a id="L372">372</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless ($full_text =~ /\Q$self-&gt;{&#39;name&#39;}\E/ism)</td></tr>
-<tr><td class="h"><a id="L377">377</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (ref $data-&gt;{&#39;resource&#39;} eq &quot;HASH&quot; and my $pdf = $data-&gt;{&#39;resource&#39;}{&#39;pdf&#39;})</td></tr>
-<tr><td class="h"><a id="L383">383</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($page-&gt;{&#39;mimetype&#39;} eq &quot;application/pdf&quot;)</td></tr>
-<tr><td class="h"><a id="L401">401</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless $url</td></tr>
-<tr><td class="h"><a id="L405">405</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($elapsed &lt; $self-&gt;{&#39;min_interval&#39;})</td></tr>
-<tr><td class="h"><a id="L411">411</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless $resp-&gt;is_success</td></tr>
-<tr><td class="h"><a id="L415">415</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if $@ or ref $json ne &quot;HASH&quot;</td></tr>
-<tr><td class="h"><a id="L418">418</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">ref $_ eq &#39;HASH&#39; ? :</td></tr>
-<tr><td class="h"><a id="L433">433</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (index($url, $string) != -1)</td></tr>
-<tr><td class="h"><a id="L458">458</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($response-&gt;is_success and $response-&gt;header(&quot;Content-Type&quot;) and $response-&gt;header(&quot;Content-Type&quot;) =~ /json/)</td></tr>
-<tr><td class="h"><a id="L469">469</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($format =~ /collection/i or $format =~ /web page/i)</td></tr>
-<tr><td class="h"><a id="L476">476</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($conditional ne &quot;True&quot;)</td></tr>
-<tr><td class="h"><a id="L480">480</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless ($filter_out)</td></tr>
-<tr><td class="h"><a id="L482">482</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (my $item = $result-&gt;{&#39;id&#39;})</td></tr>
-<tr><td class="h"><a id="L484">484</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($item =~ m[^http://www\.loc\.gov/resource])</td></tr>
-<tr><td class="h"><a id="L489">489</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($item =~ m[^http://www\.loc\.gov/item])</td></tr>
-<tr><td class="h"><a id="L498">498</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($depth &lt;= 10 and defined(my $next_url = $data-&gt;{&#39;pagination&#39;}{&#39;next&#39;}))</td></tr>
+<tr><td class="h"><a id="L261">261</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($query_parameters{&#39;location_state&#39;} eq &quot;District of columbia&quot;)</td></tr>
+<tr><td class="h"><a id="L265">265</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($params-&gt;{&#39;middlename&#39;}) { }</td></tr>
+<tr><td class="h"><a id="L276">276</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($params-&gt;{&#39;date_of_birth&#39;})</td></tr>
+<tr><td class="h"><a id="L279">279</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($params-&gt;{&#39;date_of_death&#39;})</td></tr>
+<tr><td class="h"><a id="L287">287</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $query_parameters{&#39;start_date&#39;}</td></tr>
+<tr><td class="h"><a id="L288">288</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $query_parameters{&#39;end_date&#39;}</td></tr>
+<tr><td class="h"><a id="L299">299</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (scalar @{$items;})</td></tr>
+<tr><td class="h"><a id="L307">307</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (scalar @{$items;}) { }</td></tr>
+<tr><td class="h"><a id="L311">311</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">unless ($item-&gt;{&#39;id&#39;} =~ /&amp;fo=json$/)</td></tr>
+<tr><td class="h"><a id="L361">361</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $self-&gt;{&#39;matches&#39;} == 0 or $self-&gt;{&#39;index&#39;} &gt;= $self-&gt;{&#39;matches&#39;}</td></tr>
+<tr><td class="h"><a id="L368">368</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if (my $cached = $self-&gt;{&#39;cache&#39;}-&gt;get($cache_key))</td></tr>
+<tr><td class="h"><a id="L375">375</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if ($elapsed &lt; $self-&gt;{&#39;min_interval&#39;})</td></tr>
+<tr><td class="h"><a id="L386">386</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($resp-&gt;is_error)</td></tr>
+<tr><td class="h"><a id="L387">387</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">unless $resp-&gt;code == 404</td></tr>
+<tr><td class="h"><a id="L391">391</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless ($resp-&gt;is_success)</td></tr>
+<tr><td class="h"><a id="L399">399</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($@)</td></tr>
+<tr><td class="h"><a id="L405">405</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">unless (defined $full_text)</td></tr>
+<tr><td class="h"><a id="L409">409</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless (defined $full_text)</td></tr>
+<tr><td class="h"><a id="L414">414</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ($full_text =~ /\Q$self-&gt;{&#39;name&#39;}\E/ism)</td></tr>
+<tr><td class="h"><a id="L419">419</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if (ref $data-&gt;{&#39;resource&#39;} eq &quot;HASH&quot; and my $pdf = $data-&gt;{&#39;resource&#39;}{&#39;pdf&#39;})</td></tr>
+<tr><td class="h"><a id="L425">425</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($page-&gt;{&#39;mimetype&#39;} eq &quot;application/pdf&quot;)</td></tr>
+<tr><td class="h"><a id="L439">439</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless $url</td></tr>
+<tr><td class="h"><a id="L443">443</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if ($elapsed &lt; $self-&gt;{&#39;min_interval&#39;})</td></tr>
+<tr><td class="h"><a id="L449">449</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless $resp-&gt;is_success</td></tr>
+<tr><td class="h"><a id="L453">453</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $@ or ref $json ne &quot;HASH&quot;</td></tr>
+<tr><td class="h"><a id="L456">456</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">ref $_ eq &#39;HASH&#39; ? :</td></tr>
+<tr><td class="h"><a id="L475">475</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if (index($url, $string) != -1)</td></tr>
+<tr><td class="h"><a id="L500">500</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if ($response-&gt;is_success and $response-&gt;header(&quot;Content-Type&quot;) and $response-&gt;header(&quot;Content-Type&quot;) =~ /json/)</td></tr>
+<tr><td class="h"><a id="L511">511</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ($format =~ /collection/i or $format =~ /web page/i)</td></tr>
+<tr><td class="h"><a id="L518">518</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($conditional ne &quot;True&quot;)</td></tr>
+<tr><td class="h"><a id="L522">522</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">unless ($filter_out)</td></tr>
+<tr><td class="h"><a id="L524">524</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if (my $item = $result-&gt;{&#39;id&#39;})</td></tr>
+<tr><td class="h"><a id="L526">526</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if ($item =~ m[^http://www\.loc\.gov/resource])</td></tr>
+<tr><td class="h"><a id="L531">531</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($item =~ m[^http://www\.loc\.gov/item])</td></tr>
+<tr><td class="h"><a id="L540">540</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($depth &lt;= 10 and defined(my $next_url = $data-&gt;{&#39;pagination&#39;}{&#39;next&#39;}))</td></tr>
 </table>
 </body>
 </html>
