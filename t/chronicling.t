@@ -40,6 +40,7 @@ CHRONICLING: {
 		ok($ca->isa('Genealogy::ChroniclingAmerica'));
 
 		my $count = 0;
+		sleep(1);
 		while(my $link = $ca->get_next_entry()) {
 			diag($link);
 			uri_host_ok($link, 'tile.loc.gov');
@@ -90,6 +91,7 @@ CHRONICLING: {
 		ok($ca->isa('Genealogy::ChroniclingAmerica'));
 
 		$count = 0;
+		sleep(1);
 		while(my $link = $ca->get_next_entry()) {
 			diag($link);
 			uri_host_ok($link, 'tile.loc.gov');
