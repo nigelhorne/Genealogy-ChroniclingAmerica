@@ -1,0 +1,393 @@
+{
+   "runs" : [
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536618.65834,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "-e",
+         "start" : 1794536610.9086,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536611.05514,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "-e",
+         "start" : 1794536611.05502,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536611.47233,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/00-load.t",
+         "start" : 1794536611.47089,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536611.97998,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/10-new.t",
+         "start" : 1794536611.97906,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536612.35684,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/30-basics.t",
+         "start" : 1794536612.3566,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536612.61482,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/carp.t",
+         "start" : 1794536612.61453,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536612.89307,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/chronicling.t",
+         "start" : 1794536612.89282,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536613.14024,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/comment-spelling.t",
+         "start" : 1794536613.13997,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536613.3753,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/dist.t",
+         "start" : 1794536613.37501,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536613.61024,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/eof.t",
+         "start" : 1794536613.60996,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536613.84336,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/eol.t",
+         "start" : 1794536613.84305,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536614.0902,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/kwalitee.t",
+         "start" : 1794536614.08991,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536614.3905,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/limiting.t",
+         "start" : 1794536614.39025,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536614.63902,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/manifest.t",
+         "start" : 1794536614.63874,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536615.20667,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/mocked.t",
+         "start" : 1794536615.06283,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536615.55317,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/modules-used.t",
+         "start" : 1794536615.55287,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536615.78588,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/no404s.t",
+         "start" : 1794536615.78561,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536616.01917,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/noopentickets.t",
+         "start" : 1794536616.01887,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536616.25272,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/pod-cm.t",
+         "start" : 1794536616.25251,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536616.48578,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/pod-coverage.t",
+         "start" : 1794536616.48552,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536616.71788,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/pod-links.t",
+         "start" : 1794536616.71764,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536616.95256,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/pod-snippets.t",
+         "start" : 1794536616.95228,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536617.18563,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/pod-spelling.t",
+         "start" : 1794536617.18537,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536617.41798,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/pod-synopsis.t",
+         "start" : 1794536617.41773,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536617.65076,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/pod.t",
+         "start" : 1794536617.65051,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536617.91205,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/port.t",
+         "start" : 1794536617.91179,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536618.15058,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/strict.t",
+         "start" : 1794536618.1503,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536618.38451,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/unused.t",
+         "start" : 1794536618.38427,
+         "version" : "0.08"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Find URLs for a given person on the Library of Congress Newspaper Records",
+         "dir" : "/home/runner/work/Genealogy-ChroniclingAmerica/Genealogy-ChroniclingAmerica",
+         "finish" : 1794536618.61913,
+         "name" : "Genealogy-ChroniclingAmerica",
+         "perl" : "5.40.5",
+         "run" : "t/vars.t",
+         "start" : 1794536618.61888,
+         "version" : "0.08"
+      }
+   ],
+   "summary" : {
+      "Total" : {
+         "branch" : {
+            "covered" : 46,
+            "error" : 48,
+            "percentage" : 48.936170212766,
+            "total" : 94,
+            "uncoverable" : 0
+         },
+         "condition" : {
+            "covered" : 20,
+            "error" : 30,
+            "percentage" : 40,
+            "total" : 50,
+            "uncoverable" : 0
+         },
+         "statement" : {
+            "covered" : 160,
+            "error" : 49,
+            "percentage" : 76.555023923445,
+            "total" : 209
+         },
+         "subroutine" : {
+            "covered" : 16,
+            "percentage" : 100,
+            "total" : 16
+         },
+         "total" : {
+            "covered" : 242,
+            "error" : 127,
+            "percentage" : 65.5826558265583,
+            "total" : 369,
+            "uncoverable" : 0
+         }
+      },
+      "blib/lib/Genealogy/ChroniclingAmerica.pm" : {
+         "branch" : {
+            "covered" : 46,
+            "error" : 48,
+            "percentage" : 48.936170212766,
+            "total" : 94,
+            "uncoverable" : 0
+         },
+         "condition" : {
+            "covered" : 20,
+            "error" : 30,
+            "percentage" : 40,
+            "total" : 50,
+            "uncoverable" : 0
+         },
+         "statement" : {
+            "covered" : 160,
+            "error" : 49,
+            "percentage" : 76.555023923445,
+            "total" : 209
+         },
+         "subroutine" : {
+            "covered" : 16,
+            "percentage" : 100,
+            "total" : 16
+         },
+         "total" : {
+            "covered" : 242,
+            "error" : 127,
+            "percentage" : 65.5826558265583,
+            "total" : 369,
+            "uncoverable" : 0
+         }
+      }
+   }
+}
